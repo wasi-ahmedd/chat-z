@@ -188,7 +188,8 @@ function createUser(userId) {
     incomingFollowRequests: [],
     outgoingFollowRequests: [],
     friends: [],
-    notifications: []
+    notifications: [],
+    history: []
   }
 }
 
@@ -305,6 +306,30 @@ function endMatch(matchId, disconnectingUserId = null) {
   }
 
   activeMatches.delete(matchId)
+
+  // Save to history for both users
+  const sessionSummary = {
+    id: matchId,
+    user1: match.user1.userId,
+    user2: match.user2.userId,
+    user1Username: getUser(match.user1.userId)?.username || 'Stranger',
+    user2Username: getUser(match.user2.userId)?.username || 'Stranger',
+    sharedInterests: match.sharedInterests,
+    startedAt: match.startedAt,
+    durationMs: Date.now() - match.startedAt,
+    messageCount: match.messages.length
+  }
+
+  const user1 = getUser(match.user1.userId)
+  const user2 = getUser(match.user2.userId)
+  if (user1) {
+    user1.history.unshift(sessionSummary)
+    if (user1.history.length > 50) user1.history.pop()
+  }
+  if (user2) {
+    user2.history.unshift(sessionSummary)
+    if (user2.history.length > 50) user2.history.pop()
+  }
 
   const participantSockets = [match.user1.socketId, match.user2.socketId]
     .map((socketId) => io.sockets.sockets.get(socketId))
@@ -572,6 +597,7 @@ function canEntriesMatch(leftEntry, rightEntry) {
   const rightNeedsShared = rightEntry.withInterests && rightEntry.interests.length > 0 && !entryAllowsFallback(rightEntry)
 
   if ((leftNeedsShared || rightNeedsShared) && sharedInterests.length === 0) {
+    console.log(`[matchmaking] skip same-interests: user1=${leftEntry.userId} user2=${rightEntry.userId}`)
     return null
   }
 
@@ -608,6 +634,7 @@ function processQueue() {
           continue
         }
 
+        console.log(`[matchmaking] PAIR_FOUND: ${leftEntry.userId} + ${rightEntry.userId}`)
         matchQueue.splice(rightIndex, 1)
         matchQueue.splice(leftIndex, 1)
 
@@ -622,27 +649,38 @@ function processQueue() {
         }
 
         activeMatches.set(matchId, match)
-        const leftSocket = io.sockets.sockets.get(leftEntry.socketId)
-        const rightSocket = io.sockets.sockets.get(rightEntry.socketId)
-        if (leftSocket && rightSocket) {
-          leftSocket.data.currentMatchId = matchId
-          rightSocket.data.currentMatchId = matchId
-          analytics.totalChats += 1
-          analytics.chatsByHour[new Date().getHours()] += 1
-          updateDailyStats('chats')
+        analytics.totalChats += 1
+        analytics.chatsByHour[new Date().getHours()] += 1
+        updateDailyStats('chats')
 
-          leftSocket.emit('match_found', {
-            matchId,
-            partner: getPublicUserData(rightEntry.userId, rightEntry.gender),
-            sharedInterests: matchDecision.sharedInterests
-          })
+        // Set match state for ALL sockets of these users
+        const leftSockets = io.sockets.adapter.rooms.get(leftEntry.userId)
+        const rightSockets = io.sockets.adapter.rooms.get(rightEntry.userId)
 
-          rightSocket.emit('match_found', {
-            matchId,
-            partner: getPublicUserData(leftEntry.userId, leftEntry.gender),
-            sharedInterests: matchDecision.sharedInterests
-          })
+        if (leftSockets) {
+          for (const sId of leftSockets) {
+            const s = io.sockets.sockets.get(sId)
+            if (s) s.data.currentMatchId = matchId
+          }
         }
+        if (rightSockets) {
+          for (const sId of rightSockets) {
+            const s = io.sockets.sockets.get(sId)
+            if (s) s.data.currentMatchId = matchId
+          }
+        }
+
+        io.to(leftEntry.userId).emit('match_found', {
+          matchId,
+          partner: getPublicUserData(rightEntry.userId, rightEntry.gender),
+          sharedInterests: matchDecision.sharedInterests
+        })
+
+        io.to(rightEntry.userId).emit('match_found', {
+          matchId,
+          partner: getPublicUserData(leftEntry.userId, leftEntry.gender),
+          sharedInterests: matchDecision.sharedInterests
+        })
 
         foundMatch = true
         break
@@ -659,6 +697,7 @@ function processQueue() {
 
 setInterval(() => {
   processQueue()
+  io.emit('online_count', { count: io.engine.clientsCount || 0 })
 }, 1000)
 
 app.get('/api/health', (req, res) => {
@@ -672,6 +711,9 @@ app.get('/api/health', (req, res) => {
 app.post('/api/auth/signup', (req, res) => {
   const userId = uuidv4()
   const user = createUser(userId)
+  
+  if (req.body.username) user.username = stripTags(req.body.username).slice(0, 32)
+  if (req.body.gender) user.gender = sanitizeGender(req.body.gender)
 
   users.set(userId, user)
   issueSessionCookie(res, userId)
@@ -679,6 +721,20 @@ app.post('/api/auth/signup', (req, res) => {
   updateDailyStats('users')
 
   res.status(201).json({ user: buildClientUser(userId) })
+})
+
+app.get('/api/users/history', (req, res) => {
+  const userId = getAuthenticatedUserId(req)
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' })
+  }
+
+  const user = getUser(userId)
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' })
+  }
+
+  return res.json({ history: user.history || [] })
 })
 
 app.get('/api/users/me', (req, res) => {
@@ -1032,6 +1088,7 @@ io.use((socket, next) => {
   const decoded = verifyToken(cookies[SESSION_COOKIE])
 
   if (!decoded) {
+    console.log(`[io-auth] Rejected connection for socket=${socket.id}: NO_VAULT_SESSION`)
     return next(new Error('Unauthorized'))
   }
 
@@ -1053,6 +1110,22 @@ io.on('connection', (socket) => {
   analytics.activeNow = io.engine.clientsCount || 0
   emitSocialState(currentUserId)
   console.log(`[socket] connected ${socket.id} user=${currentUserId}`)
+
+  // Catch-up Mechanism: Check if this user is ALREADY in an active match
+  // If so, emit the match data immediately to the new socket
+  for (const [matchId, match] of activeMatches.entries()) {
+    if (match.user1.userId === currentUserId || match.user2.userId === currentUserId) {
+      const partnerUser = match.user1.userId === currentUserId ? match.user2 : match.user1
+      socket.emit('match_found', {
+        matchId,
+        partner: getPublicUserData(partnerUser.userId, partnerUser.gender),
+        sharedInterests: match.sharedInterests,
+        reconnected: true
+      })
+      console.log(`[sync] Catch-up data sent to user=${currentUserId} for match=${matchId}`)
+      break
+    }
+  }
 
   socket.on('join_queue', (payload = {}) => {
     const user = getUser(currentUserId)
@@ -1100,12 +1173,12 @@ io.on('connection', (socket) => {
       filterGender: effectiveFilter,
       isPremium: user.isPremium,
       withInterests,
-      interestTimeoutMs: interestTimeoutSeconds === null ? null : interestTimeoutSeconds * 1000,
+      interestTimeoutMs: 2000,
       joinedAt: Date.now(),
       fallbackNotified: interests.length === 0 || !withInterests
     })
     processQueue()
-    console.log(`[queue] user=${currentUserId} size=${matchQueue.length}`)
+    console.log(`[queue] user=${currentUserId} interests=[${interests.join(',')}] size=${matchQueue.length}`)
   })
 
   socket.on('leave_queue', () => {

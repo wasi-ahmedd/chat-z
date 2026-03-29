@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { useState, useEffect } from 'react'
 import AppLayout from '../components/layout/AppLayout'
 import NeoButton from '../components/common/NeoButton'
@@ -5,9 +6,19 @@ import { useNavigate } from 'react-router-dom'
 import { useSocket } from '../context/SocketContext'
 import { authService } from '../services/api'
 import { Hash, Zap, Users, ShieldAlert, Award, Search, X } from 'lucide-react'
+=======
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useSocket } from '../context/SocketContext'
+import ProfileModal from '../components/ProfileModal'
+>>>>>>> Stashed changes
 
 const Lobby = () => {
+  const { socialState, user, isQueueing, queuePosition, socket, interests, setInterests, onlineCount, isConnected } = useSocket()
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const [interestInput, setInterestInput] = useState('')
   const navigate = useNavigate()
+<<<<<<< Updated upstream
   const { user, setUser, socket, onlineCount } = useSocket()
   const [interests, setInterests] = useState(['NEO_BRUTALISM', 'WEB3_ANARCHY'])
   const [newInterest, setNewInterest] = useState('')
@@ -34,10 +45,37 @@ const Lobby = () => {
       setInterests([...interests, newInterest.toUpperCase()])
       setNewInterest('')
     }
+=======
+
+  const handleStartMatching = () => {
+    if (socket) {
+      socket.emit('join_queue', {
+        interests: interests,
+        withInterests: interests.length > 0,
+        genderFilter: 'both'
+      })
+      navigate('/chat')
+    }
+>>>>>>> Stashed changes
   }
 
-  const removeInterest = (index) => {
-    setInterests(interests.filter((_, i) => i !== index))
+  const handleAddInterest = (e) => {
+    if (e) e.preventDefault()
+    const val = interestInput.trim().toLowerCase()
+    if (val && !interests.includes(val) && interests.length < 5) {
+      setInterests([...interests, val])
+      setInterestInput('')
+    }
+  }
+
+  const handleRemoveInterest = (interest) => {
+    setInterests(interests.filter(i => i !== interest))
+  }
+
+  const handleLeaveQueue = () => {
+    if (socket) {
+      socket.emit('leave_queue')
+    }
   }
 
   const startChat = () => {
@@ -59,6 +97,7 @@ const Lobby = () => {
   }
 
   return (
+<<<<<<< Updated upstream
     <AppLayout>
       <div className="p-4 md:p-8 flex flex-col gap-8 pb-24 md:pb-8">
         {/* Header Stats */}
@@ -84,10 +123,85 @@ const Lobby = () => {
             </div>
             <Award size={64} className="opacity-20 -mr-4 group-hover:scale-125 transition-transform" />
           </div>
+=======
+    <div className="bg-background text-on-background min-h-screen font-body overflow-x-hidden">
+      {/* SideNavBar */}
+      <aside className="hidden md:flex flex-col h-screen fixed left-0 top-0 z-40 bg-[#191919] font-headline font-black uppercase border-r-4 border-black w-64 shadow-[8px_0px_0px_0px_#000000]">
+        <div className="p-6">
+          <h1 className="text-2xl font-black text-[#fed023]"><Link to="/" className="decoration-none text-inherit">VIBECHAT</Link></h1>
+          <p className="text-[10px] tracking-widest text-[#ff6d8d] mt-1 italic">RAW_MODE_ON</p>
+        </div>
+        <nav className="flex-1 mt-4">
+          <div className="flex items-center gap-4 bg-[#fed023] text-black border-2 border-black m-2 p-4 transition-none cursor-default">
+            <span className="material-symbols-outlined">forum</span>
+            <span>CHANNELS</span>
+          </div>
+          <a className="flex items-center gap-4 text-white hover:text-[#9fff88] p-4 transition-none active:scale-95 decoration-none" href="#">
+            <span className="material-symbols-outlined">group</span>
+            <span>PEOPLE</span>
+          </a>
+          <Link className="flex items-center gap-4 text-white hover:text-[#9fff88] p-4 transition-none active:scale-95 decoration-none" to="/history">
+            <span className="material-symbols-outlined">history</span>
+            <span>HISTORY</span>
+          </Link>
+          <a className="flex items-center gap-4 text-white hover:text-[#9fff88] p-4 transition-none active:scale-95 decoration-none" href="#">
+            <span className="material-symbols-outlined">bolt</span>
+            <span>VIBES</span>
+          </a>
+        </nav>
+        <div className="p-4 mt-auto space-y-4 mb-4">
+          <div className="flex gap-4">
+            <button 
+              onClick={() => setIsProfileOpen(true)}
+              className="flex-1 bg-surface-container border-4 border-black p-3 hover:bg-primary hover:text-black transition-none shadow-[4px_4px_0px_0px_#000000] active:translate-x-1 active:translate-y-1 active:shadow-none uppercase font-black flex items-center justify-center gap-2"
+            >
+              <span className="material-symbols-outlined">person</span>
+              <span className="text-[10px]">PROFILE</span>
+            </button>
+            <Link 
+              to="/settings"
+              className="flex-1 bg-surface-container border-4 border-black p-3 hover:bg-secondary hover:text-black transition-none shadow-[4px_4px_0px_0px_#000000] active:translate-x-1 active:translate-y-1 active:shadow-none uppercase font-black flex items-center justify-center gap-2 decoration-none text-white hover:decoration-none"
+            >
+              <span className="material-symbols-outlined">settings</span>
+              <span className="text-[10px]">SETTINGS</span>
+            </Link>
+          </div>
+          <button 
+            disabled={!isConnected}
+            onClick={isQueueing ? handleLeaveQueue : handleStartMatching}
+            className={`block text-center w-full ${!isConnected ? 'bg-surface-container text-outline' : isQueueing ? 'bg-error' : 'bg-[#ff6d8d]'} text-black border-4 border-black p-4 font-black shadow-[4px_4px_0px_0px_#000000] hover:shadow-[6px_6px_0px_0px_#000000] transition-none active:translate-x-1 active:translate-y-1 active:shadow-none uppercase`}
+          >
+            {isQueueing ? 'STOP_MATCH' : isConnected ? 'START_CHAT' : 'CONNECTING...'}
+          </button>
+        </div>
+      </aside>
+
+      {/* TopAppBar - Mobile Only */}
+      <header className="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-[#0e0e0e] border-b-4 border-black md:hidden shadow-[4px_4px_0px_0px_#000000]">
+        <div className="text-3xl font-black italic text-[#fed023] tracking-tighter font-headline uppercase">VIBECHAT</div>
+        <div className="flex gap-4">
+          <button onClick={() => setIsProfileOpen(true)} className="material-symbols-outlined text-[#fed023]">person</button>
+          <Link to="/settings" className="material-symbols-outlined text-[#fed023] decoration-none">settings</Link>
+        </div>
+      </header>
+
+      {/* Main Canvas */}
+      <main className="md:ml-64 mr-0 lg:mr-80 min-h-screen pt-24 md:pt-12 p-8 transition-all">
+        {/* Live Counter Section */}
+        <div className="mb-12 flex items-center gap-4 text-white">
+          <div className="relative flex items-center justify-center h-4 w-4">
+            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isConnected ? 'bg-tertiary' : 'bg-error'} opacity-75`}></span>
+            <span className={`relative inline-flex rounded-full h-3 w-3 ${isConnected ? 'bg-tertiary' : 'bg-error'}`}></span>
+          </div>
+          <h2 className="font-headline font-black text-2xl tracking-tight uppercase">
+            {isConnected ? onlineCount?.toLocaleString() || '1,337' : 'OFFLINE'} <span className="text-outline">{isConnected ? 'USERS_ONLINE' : 'LINK_SEVERED'}</span>
+          </h2>
+>>>>>>> Stashed changes
         </div>
 
         {/* Matching Controls */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<<<<<<< Updated upstream
           {/* Interest Matching */}
           <div className="bg-surface-container border-4 border-black p-8 shadow-lg flex flex-col gap-6">
             <div className="flex justify-between items-start">
@@ -211,6 +325,142 @@ const Lobby = () => {
       </div>
       <PremiumModal isOpen={isPremiumOpen} onClose={() => setIsPremiumOpen(false)} />
     </AppLayout>
+=======
+          {/* Input & Tags Card */}
+          <section className="bg-surface-container border-4 border-black p-8 shadow-[8px_8px_0px_0px_#000000]">
+            <h3 className="font-headline font-black text-3xl mb-6 text-primary uppercase italic">Interest Matching</h3>
+            <div className="space-y-6">
+              <form onSubmit={handleAddInterest} className="relative">
+                <input 
+                  className="w-full bg-surface-container-highest border-4 border-black p-4 font-bold text-xl placeholder:text-outline focus:border-primary focus:ring-0 transition-none outline-none text-white font-body" 
+                  placeholder="TYPE_A_VIBE..." 
+                  type="text"
+                  value={interestInput}
+                  onChange={(e) => setInterestInput(e.target.value)}
+                />
+                <button 
+                  type="submit"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer bg-none border-none p-0 flex items-center"
+                >
+                  <span className="material-symbols-outlined text-primary text-3xl">add_box</span>
+                </button>
+              </form>
+              <div className="flex flex-wrap gap-4">
+                {interests.map((interest) => (
+                  <div 
+                    key={interest}
+                    onClick={() => handleRemoveInterest(interest)}
+                    className="bg-primary text-black border-2 border-black px-4 py-2 font-headline font-black text-sm uppercase flex items-center gap-2 hover:translate-x-1 hover:translate-y-1 transition-none cursor-pointer"
+                  >
+                    #{interest} <span className="material-symbols-outlined text-xs">close</span>
+                  </div>
+                ))}
+                {interests.length === 0 && (
+                  <div className="text-outline italic text-sm uppercase font-bold tracking-widest px-2">
+                    Add_Interests_to_Narrow_Search
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+
+          {/* Status Card */}
+          <section className="bg-surface-container border-4 border-black p-8 shadow-[8px_8px_0px_0px_#000000] flex flex-col justify-center items-start">
+            <div className="bg-tertiary text-black border-2 border-black p-2 font-headline font-black text-xs mb-4 uppercase">
+              Status: {isQueueing ? 'SEARCHING...' : 'READY'}
+            </div>
+            <h3 className="font-headline font-black text-4xl mb-4 text-on-surface uppercase leading-none italic">
+              Your vibe is currently set to <span className="text-secondary underline decoration-4 underline-offset-8 capitalize">{interests[0] || 'Chaotic'}</span>.
+            </h3>
+            <p className="text-on-surface-variant font-medium max-w-xs">{interests.length > 0 ? `Matching with other ${interests[0]} fans and high-energy groups.` : 'Matching algorithm prioritizing high-energy groups and active channels.'}</p>
+          </section>
+        </div>
+
+        {/* Central Action Hero */}
+        <div className="mt-16 mb-16 flex flex-col items-center justify-center py-20 bg-[url('https://www.transparenttextures.com/patterns/asfalt-light.png')]">
+          <button 
+            disabled={!isConnected}
+            onClick={isQueueing ? handleLeaveQueue : handleStartMatching}
+            className={`group relative ${!isConnected ? 'bg-surface-container text-outline' : 'bg-primary'} text-black border-4 border-black px-12 py-8 font-headline font-black text-5xl md:text-7xl uppercase italic tracking-tighter shadow-[12px_12px_0px_0px_#000000] ${isConnected ? 'hover:translate-x-2 hover:translate-y-2 hover:shadow-none active:scale-95' : 'cursor-not-allowed'} transition-none`}
+          >
+            {isQueueing ? 'STOP_QUEUE' : isConnected ? 'START_MATCHING' : 'OFFLINE_MODE'}
+            <span className={`absolute -top-4 -right-4 ${isConnected ? 'bg-secondary' : 'bg-error'} text-white text-base p-2 border-2 border-black not-italic rotate-12`}>
+              {isConnected ? 'GO_LIVE' : 'NO_SIGNAL'}
+            </span>
+          </button>
+          
+          {isQueueing && (
+            <div className="mt-8 text-center space-y-4">
+               <p className="font-headline font-extrabold text-primary text-4xl uppercase tracking-widest animate-pulse">
+                QUEUE_POSITION: {queuePosition || '...'}
+              </p>
+              <p className="font-headline font-extrabold text-outline text-xl uppercase tracking-widest">
+                ESTIMATED_WAIT: 4S
+              </p>
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* Right Panel: Active Friends */}
+      <aside className="hidden lg:flex flex-col h-screen fixed right-0 top-0 z-40 bg-[#0e0e0e] border-l-4 border-black w-80 shadow-[-8px_0px_0px_0px_#000000] p-6">
+        <h2 className="font-headline font-black text-2xl mb-8 text-white flex items-center justify-between uppercase">
+          Friends 
+          <span className="text-primary text-sm font-bold bg-black border-2 border-primary px-2">{socialState?.counts?.totalFriendUnread || 0}</span>
+        </h2>
+        <div className="space-y-6 overflow-y-auto pr-2">
+          {socialState?.friends && socialState.friends.length > 0 ? (
+            socialState.friends.map((friend) => (
+              <div key={friend.id} className="flex items-center gap-4 bg-surface-container border-4 border-black p-3 hover:bg-surface-bright transition-none cursor-pointer">
+                <div className="relative shrink-0">
+                  <div className="w-14 h-14 border-2 border-black bg-primary flex items-center justify-center font-black">?</div>
+                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-tertiary border-2 border-black rounded-full"></div>
+                </div>
+                <div>
+                  <div className="font-headline font-black text-white uppercase text-lg leading-none truncate w-40">{friend.username}</div>
+                  <div className="text-tertiary font-bold text-xs uppercase mt-1">Vibe: Hyped</div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="border-4 border-black border-dashed p-6 text-center text-outline font-bold uppercase text-xs">
+              NO_FRIENDS_DETECTED
+            </div>
+          )}
+        </div>
+        <button className="block text-center mt-auto w-full bg-surface-container-highest text-white border-4 border-black p-4 font-headline font-black uppercase shadow-[4px_4px_0px_0px_#000000] hover:bg-primary hover:text-black transition-none">
+          GET_PREMIUM
+        </button>
+      </aside>
+
+      {/* BottomNavBar - Mobile Only */}
+      <nav className="fixed bottom-0 w-full z-50 flex justify-around items-stretch h-16 md:hidden bg-[#0e0e0e] border-t-4 border-black font-headline font-bold text-[10px] uppercase">
+        <Link className="flex flex-col items-center justify-center text-white h-full px-2 flex-1 hover:bg-[#ff6d8d] active:translate-y-1 transition-none decoration-none" to="/chat">
+          <span className="material-symbols-outlined mb-1">chat_bubble</span>
+          <span>CHAT</span>
+        </Link>
+        <a className="flex flex-col items-center justify-center text-white h-full px-2 flex-1 hover:bg-[#ff6d8d] active:translate-y-1 transition-none decoration-none" href="#">
+          <span className="material-symbols-outlined mb-1">explore</span>
+          <span>DISCOVER</span>
+        </a>
+        <a className="flex flex-col items-center justify-center text-white h-full px-2 flex-1 hover:bg-[#ff6d8d] active:translate-y-1 transition-none decoration-none" href="#">
+          <span className="material-symbols-outlined mb-1">sensors</span>
+          <span>LIVE</span>
+        </a>
+        <button onClick={() => setIsProfileOpen(true)} className="flex flex-col items-center justify-center text-white h-full px-2 flex-1 hover:bg-[#ff6d8d] active:translate-y-1 transition-none">
+          <span className="material-symbols-outlined mb-1">account_circle</span>
+          <span>PROFILE</span>
+        </button>
+      </nav>
+
+      {/* Profile Modal */}
+      <ProfileModal 
+        isOpen={isProfileOpen} 
+        onClose={() => setIsProfileOpen(false)} 
+        user={user}
+      />
+    </div>
+>>>>>>> Stashed changes
   )
 }
 
