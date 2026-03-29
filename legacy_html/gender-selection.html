@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@700;800;900&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#00fd00",
+              "on-error": "#450900",
+              "on-tertiary": "#026400",
+              "on-surface-variant": "#ababab",
+              "on-primary": "#594700",
+              "surface-container-lowest": "#000000",
+              "primary-container": "#ebbf01",
+              "on-surface": "#ffffff",
+              "surface-variant": "#262626",
+              "secondary": "#ff6d8d",
+              "surface-tint": "#fed023",
+              "on-secondary-container": "#fff6f5",
+              "error-dim": "#d53d18",
+              "inverse-on-surface": "#555555",
+              "surface-container-high": "#1f1f1f",
+              "error-container": "#b92902",
+              "surface-bright": "#2c2c2c",
+              "on-secondary-fixed": "#6e0028",
+              "surface-container-highest": "#262626",
+              "secondary-dim": "#e2165f",
+              "primary-fixed": "#fed023",
+              "primary-fixed-dim": "#eec209",
+              "background": "#0e0e0e",
+              "tertiary": "#9fff88",
+              "on-tertiary-container": "#015a00",
+              "on-primary-container": "#4d3d00",
+              "error": "#ff7351",
+              "on-background": "#ffffff",
+              "secondary-fixed": "#ffc2ca",
+              "primary": "#fed023",
+              "surface": "#0e0e0e",
+              "inverse-surface": "#f9f9f9",
+              "on-tertiary-fixed": "#014500",
+              "inverse-primary": "#735c00",
+              "on-primary-fixed": "#433500",
+              "on-secondary": "#480018",
+              "tertiary-container": "#00fd00",
+              "tertiary-fixed-dim": "#01ed00",
+              "tertiary-dim": "#01ed00",
+              "surface-dim": "#0e0e0e",
+              "on-secondary-fixed-variant": "#a30040",
+              "on-error-container": "#ffd2c8",
+              "surface-container": "#191919",
+              "secondary-container": "#bc004b",
+              "primary-dim": "#eec209",
+              "outline": "#757575",
+              "on-primary-fixed-variant": "#655000",
+              "surface-container-low": "#131313",
+              "secondary-fixed-dim": "#ffaeba",
+              "outline-variant": "#484848",
+              "on-tertiary-fixed-variant": "#026500"
+            },
+            fontFamily: {
+              "headline": ["Epilogue"],
+              "body": ["Space Grotesk"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+        <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-background font-body text-on-background overflow-hidden">
+    <!-- Blurred Background (The Lobby) -->
+    <div class="fixed inset-0 z-0 flex blur-md opacity-40 scale-105">
+        <!-- Side Navigation Component Placeholder -->
+        <aside class="fixed left-0 top-0 h-full w-72 flex flex-col p-4 gap-6 bg-[#191919] border-r-4 border-black shadow-[8px_0px_0px_0px_#000000] z-10">
+            <div class="text-xl font-black text-[#fed023] font-headline italic tracking-tighter">THE_LOBBY</div>
+            <div class="flex flex-col gap-4 mt-8">
+                <div class="bg-[#ff6d8d] text-black border-4 border-black p-4 font-headline uppercase translate-x-1 flex items-center gap-3">
+                    <span class="material-symbols-outlined">forum</span> Global Lobby
+                </div>
+                <div class="text-white border-2 border-transparent p-4 font-headline uppercase flex items-center gap-3">
+                    <span class="material-symbols-outlined">security</span> Private DMs
+                </div>
+                <div class="text-white border-2 border-transparent p-4 font-headline uppercase flex items-center gap-3">
+                    <span class="material-symbols-outlined">bolt</span> Trending Tags
+                </div>
+            </div>
+        </aside>
+        <!-- Content Canvas Placeholder -->
+        <main class="ml-72 w-full p-8 flex flex-col gap-12">
+            <header class="flex justify-between items-center w-full px-6 py-4 sticky top-0 bg-[#0e0e0e] border-b-4 border-black shadow-[4px_4px_0px_0px_#000000]">
+                <h1 class="font-headline font-black uppercase tracking-tighter text-3xl text-[#fed023] italic">ANON_CHAT</h1>
+                <div class="flex items-center gap-6">
+                    <span class="material-symbols-outlined text-[#fed023]">notifications</span>
+                    <span class="material-symbols-outlined text-[#fed023]">account_circle</span>
+                </div>
+            </header>
+            <div class="grid grid-cols-12 gap-8">
+                <div class="col-span-8 space-y-8">
+                    <div class="bg-surface-container border-4 border-black p-8 neo-shadow h-96">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 bg-primary border-4 border-black"></div>
+                            <div class="h-4 w-48 bg-surface-variant border-2 border-black"></div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="h-4 w-full bg-surface-variant border-2 border-black"></div>
+                            <div class="h-4 w-3/4 bg-surface-variant border-2 border-black"></div>
+                            <div class="h-4 w-5/6 bg-surface-variant border-2 border-black"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-4 space-y-8">
+                    <div class="bg-secondary border-4 border-black p-6 neo-shadow">
+                        <div class="font-headline font-black text-black text-xl mb-4">LIVE RIOTS</div>
+                        <div class="h-40 bg-black/20 border-2 border-black"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Backdrop -->
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <!-- The Modal -->
+        <div class="relative w-full max-w-lg bg-surface border-[4px] border-black neo-shadow-lg p-8 md:p-12 flex flex-col items-start overflow-hidden">
+            <!-- Decorative Element (Top Right Accent) -->
+            <div class="absolute -top-4 -right-4 w-24 h-24 bg-tertiary border-4 border-black rotate-12 -z-10"></div>
+            <!-- Modal Title -->
+            <h2 class="font-headline font-black text-4xl md:text-5xl text-primary uppercase leading-none tracking-tighter mb-4 text-left">
+                IDENTIFY_YOUR_VIBE
+            </h2>
+            <p class="font-body text-lg text-on-surface-variant font-medium mb-10 max-w-sm">
+                Before entering the digital riot, let the void know who you are. All data remains anonymous.
+            </p>
+            <!-- Choice Grid -->
+            <div class="w-full flex flex-col gap-4 mb-12">
+                <!-- Male Option -->
+                <button class="group w-full flex items-center justify-between p-5 bg-surface-container border-4 border-black neo-shadow hover:neo-shadow-lg hover:-translate-y-1 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all">
+                    <span class="font-headline font-extrabold text-2xl uppercase text-on-surface group-hover:text-primary transition-colors">Male</span>
+                    <span class="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">man</span>
+                </button>
+                <!-- Female Option -->
+                <button class="group w-full flex items-center justify-between p-5 bg-surface-container border-4 border-black neo-shadow hover:neo-shadow-lg hover:-translate-y-1 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all">
+                    <span class="font-headline font-extrabold text-2xl uppercase text-on-surface group-hover:text-secondary transition-colors">Female</span>
+                    <span class="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">woman</span>
+                </button>
+                <!-- Other Option -->
+                <button class="group w-full flex items-center justify-between p-5 bg-surface-container border-4 border-black neo-shadow hover:neo-shadow-lg hover:-translate-y-1 active:translate-x-1 active:translate-y-1 active:shadow-none transition-all">
+                    <div class="flex flex-col items-start">
+                        <span class="font-headline font-extrabold text-2xl uppercase text-on-surface group-hover:text-tertiary transition-colors leading-tight">Other</span>
+                        <span class="text-xs font-body font-bold text-on-surface-variant uppercase tracking-widest">Prefer not to say</span>
+                    </div>
+                    <span class="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform">diversity_3</span>
+                </button>
+            </div>
+            <!-- Main Action -->
+            <div class="w-full">
+                <a href="lobby.html" class="w-full bg-primary text-black font-headline font-black text-2xl py-6 border-4 border-black neo-shadow hover:neo-shadow-lg hover:bg-[#ffdf45] active:translate-x-1 active:translate-y-1 active:neo-shadow-active transition-all flex items-center justify-center gap-4 decoration-none">
+                    CONTINUE_TO_CHAT
+                    <span class="material-symbols-outlined text-3xl">arrow_forward</span>
+                </a>
+                <div class="mt-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">security</span>
+                    <p class="text-[10px] font-body font-bold uppercase tracking-tighter text-on-surface-variant">
+                        By proceeding, you agree to our <span class="text-primary border-b-2 border-primary cursor-pointer">Manifesto of Anonymity</span>
+                    </p>
+                </div>
+            </div>
+            <!-- Absolute Texture Overlays -->
+            <div class="absolute bottom-0 right-0 w-32 h-32 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle, #fed023 2px, transparent 2px); background-size: 10px 10px;"></div>
+        </div>
+    </div>
+</body>
+</html>

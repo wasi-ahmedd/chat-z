@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #fed023;
+  --secondary: #ff6d8d;
+  --tertiary: #9fff88;
+  --background: #0e0e0e;
+  --surface: #191919;
+  --on-surface: #ffffff;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--on-surface);
+  font-family: 'Space Grotesk', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.headline-font {
+  font-family: 'Epilogue', sans-serif !important;
+}
+
+/* Custom Shadows */
+.neo-shadow {
+  box-shadow: 4px 4px 0px #000000;
+}
+
+.neo-shadow-lg {
+  box-shadow: 8px 8px 0px #000000;
+}
+
+.neo-shadow-xl {
+  box-shadow: 16px 16px 0px #000000;
+}
+
+.neo-shadow-primary {
+  box-shadow: 6px 6px 0px var(--primary);
+}
+
+.neo-shadow-secondary {
+  box-shadow: 6px 6px 0px var(--secondary);
+}
+
+/* Interactive Effects */
+.active-press:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px #000000;
+}
+
+/* Animations */
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll {
+  animation: scroll 20s linear infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+  border-left: 4px solid #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border: 4px solid #000000;
+}

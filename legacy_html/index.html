@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>VIBECHAT | NO SURRENDER</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@800;900&amp;family=Space+Grotesk:wght@400;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-lowest": "#000000",
+                        "surface-container": "#191919",
+                        "surface-variant": "#262626",
+                        "primary-fixed": "#fed023",
+                        "on-surface": "#ffffff",
+                        "on-tertiary-container": "#015a00",
+                        "secondary": "#ff6d8d",
+                        "outline-variant": "#484848",
+                        "outline": "#757575",
+                        "primary-container": "#ebbf01",
+                        "on-primary-fixed-variant": "#655000",
+                        "tertiary-fixed": "#00fd00",
+                        "secondary-fixed-dim": "#ffaeba",
+                        "surface-bright": "#2c2c2c",
+                        "inverse-on-surface": "#555555",
+                        "on-secondary-fixed-variant": "#a30040",
+                        "on-error": "#450900",
+                        "surface-container-high": "#1f1f1f",
+                        "on-background": "#ffffff",
+                        "on-secondary": "#480018",
+                        "on-primary-fixed": "#433500",
+                        "surface-tint": "#fed023",
+                        "on-tertiary-fixed": "#014500",
+                        "surface": "#0e0e0e",
+                        "surface-container-low": "#131313",
+                        "error": "#ff7351",
+                        "surface-dim": "#0e0e0e",
+                        "primary": "#fed023",
+                        "inverse-surface": "#f9f9f9",
+                        "error-dim": "#d53d18",
+                        "on-tertiary-fixed-variant": "#026500",
+                        "on-primary": "#594700",
+                        "error-container": "#b92902",
+                        "inverse-primary": "#735c00",
+                        "on-tertiary": "#026400",
+                        "tertiary-container": "#00fd00",
+                        "primary-dim": "#eec209",
+                        "on-secondary-container": "#fff6f5",
+                        "tertiary-dim": "#01ed00",
+                        "secondary-container": "#bc004b",
+                        "on-surface-variant": "#ababab",
+                        "tertiary": "#9fff88",
+                        "surface-container-highest": "#262626",
+                        "primary-fixed-dim": "#eec209",
+                        "on-secondary-fixed": "#6e0028",
+                        "on-error-container": "#ffd2c8",
+                        "tertiary-fixed-dim": "#01ed00",
+                        "background": "#0e0e0e",
+                        "on-primary-container": "#4d3d00",
+                        "secondary-fixed": "#ffc2ca",
+                        "secondary-dim": "#e2165f"
+                    },
+                    fontFamily: {
+                        "headline": ["Epilogue"],
+                        "body": ["Space Grotesk"],
+                        "label": ["Space Grotesk"]
+                    },
+                    borderRadius: { "DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+        <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-background text-on-background">
+    <!-- TopNavBar -->
+    <nav class="flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50 bg-[#0e0e0e] border-b-4 border-black shadow-[4px_4px_0px_#000000]">
+        <div class="text-3xl font-['Epilogue'] font-black text-[#fed023] tracking-tighter italic">VIBECHAT</div>
+        <div class="hidden md:flex gap-8 items-center">
+            <a class="font-['Epilogue'] font-black uppercase tracking-tighter text-[#ff6d8d] underline decoration-4 underline-offset-8" href="#">FEED</a>
+            <a class="font-['Epilogue'] font-black uppercase tracking-tighter text-[#fed023] hover:bg-[#fed023] hover:text-black transition-none px-2 py-1" href="lobby.html">CHANNELS</a>
+            <a class="font-['Epilogue'] font-black uppercase tracking-tighter text-[#fed023] hover:bg-[#fed023] hover:text-black transition-none px-2 py-1" href="#">VAULT</a>
+            <a class="font-['Epilogue'] font-black uppercase tracking-tighter text-[#fed023] hover:bg-[#fed023] hover:text-black transition-none px-2 py-1" href="#">CREW</a>
+        </div>
+        <div class="flex gap-4">
+            <button class="hidden lg:block bg-[#fed023] text-black font-['Epilogue'] font-black uppercase px-6 py-2 border-4 border-black shadow-[4px_4px_0px_#000000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-none">JOIN RIOT</button>
+            <button class="text-[#fed023] font-['Epilogue'] font-black uppercase px-4 py-2 hover:bg-[#fed023] hover:text-black transition-none">LOG IN</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative w-full min-h-[921px] flex flex-col items-start justify-center px-6 md:px-16 overflow-hidden pt-20 pb-32">
+        <div class="absolute top-20 right-10 md:right-20 rotate-6 z-0 opacity-20 md:opacity-100">
+            <div class="w-64 h-64 md:w-96 md:h-96 border-8 border-primary bg-surface-container neo-shadow-lg flex items-center justify-center p-4">
+                <img alt="Retro tech vibe" class="w-full h-full object-cover border-4 border-black" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZkqFew-tC-37UlbiIavDtI0gN49o8ssS0cPEDyDj_yeuJYbWs7Bhh5yjUuTY3ua9FBo8dgyDqTK6ZBAsxorfmFlrcvX60FGS-O-1glYtRj_TkRJhB_zInebR78If0vkWwNO1h7Ihjm-KcwF19AZCdAkxxHZxG52wfP-V1wGo76bcsvBMv-hROuZyYgzpBYXIePnSQ-cgcdxAm1yHxCFiL-qJHxJqxkl8tfRvk4B21jM00dkEc2nI70fiVTGtxWBpcpZfkAVFQuok"/>
+            </div>
+        </div>
+        <div class="z-10 max-w-4xl">
+            <h1 class="font-headline font-black text-6xl md:text-9xl uppercase leading-[0.85] tracking-tighter mb-8">
+                Meet <span class="text-secondary">Random</span><br/>
+                Strangers,<br/>
+                <span class="bg-primary text-black px-4 inline-block -rotate-1">Chat</span><br/>
+                Anonymously
+            </h1>
+            <p class="font-body text-xl md:text-2xl font-bold max-w-xl mb-12 text-on-surface-variant border-l-8 border-tertiary pl-6">
+                No profiles. No tracking. No filters. Just raw, unfiltered conversation in the digital underground. Join the chaos or stay silent.
+            </p>
+            <div class="flex flex-wrap gap-6">
+                <a href="gender-selection.html" class="bg-primary text-black text-2xl font-headline font-black uppercase px-10 py-6 border-4 border-black neo-shadow-lg active-press transition-none flex items-center gap-3 decoration-none">
+                    Start Chatting
+                    <span class="material-symbols-outlined font-bold">bolt</span>
+                </a>
+                <button class="bg-surface-container text-primary text-2xl font-headline font-black uppercase px-10 py-6 border-4 border-black neo-shadow-lg active-press transition-none">
+                    Enter Vault
+                </button>
+            </div>
+        </div>
+        <!-- Ticker Tape -->
+        <div class="absolute bottom-0 left-0 w-full bg-tertiary text-black py-4 border-t-4 border-black overflow-hidden whitespace-nowrap">
+            <div class="flex animate-scroll font-headline font-black text-2xl uppercase">
+                <span class="mx-8">14.2K LIVE NOW</span>
+                <span class="mx-8">NO SURRENDER</span>
+                <span class="mx-8">ANONYMOUS FOREVER</span>
+                <span class="mx-8">VIBE OR DIE</span>
+                <span class="mx-8">14.2K LIVE NOW</span>
+                <span class="mx-8">NO SURRENDER</span>
+                <span class="mx-8">ANONYMOUS FOREVER</span>
+                <span class="mx-8">VIBE OR DIE</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section (Bento Grid) -->
+    <section class="py-32 px-6 md:px-16 bg-surface-container-low">
+        <h2 class="font-headline font-black text-5xl md:text-7xl uppercase mb-16 tracking-tighter">
+            System <span class="text-primary">Capabilities</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <!-- Large Feature 1 -->
+            <div class="md:col-span-8 bg-surface-container border-4 border-black p-10 neo-shadow-primary flex flex-col md:flex-row gap-10">
+                <div class="flex-1">
+                    <div class="text-secondary font-headline font-black text-4xl mb-4">01. ZERO LOGS</div>
+                    <p class="font-body text-xl">We don't know who you are. We don't want to know. Your data is purged the second you disconnect. Permanent amnesia by design.</p>
+                </div>
+                <div class="w-full md:w-64 h-48 border-4 border-black bg-black shrink-0 relative overflow-hidden">
+                    <img alt="Server racks" class="w-full h-full object-cover opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABsc-YLRf5odvE1tOdq1OI3aaWZ7bdEDd1jX3kao0B16y5g9nVryvzevl708rvkPJ1xSUkqH9zn8BwYLAQdZszLk8jE3nOqbBb5Sd6iztwHDP0GmtxQ2rTBwR5v43_VGYg1FOSUKFzE1Pos6fAuTTRi10HNdXcEMwW0lOQZooS1IJsyJKEoYmF-1cJLaB6zcxKZl0qfIhvrvrUM97Bw-UP66IOgF9jc366yDDPt7NmtPhxK37F8K98fzGHsNJBkDOOmENoH7u7YP0"/>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-6xl text-primary" style="font-variation-settings: 'FILL' 1;">security</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Small Feature 2 -->
+            <div class="md:col-span-4 bg-secondary text-black border-4 border-black p-10 neo-shadow active:rotate-1 transition-transform">
+                <span class="material-symbols-outlined text-5xl mb-6">group</span>
+                <div class="font-headline font-black text-3xl mb-4 uppercase leading-none">Global Crews</div>
+                <p class="font-body font-bold">Join temporary squads based on interest. Raid the feed and disappear.</p>
+            </div>
+            <!-- Small Feature 3 -->
+            <div class="md:col-span-4 bg-tertiary text-black border-4 border-black p-10 neo-shadow">
+                <span class="material-symbols-outlined text-5xl mb-6">lock_open</span>
+                <div class="font-headline font-black text-3xl mb-4 uppercase leading-none">Vault Access</div>
+                <p class="font-body font-bold">End-to-end encrypted file drops that self-destruct after 60 seconds.</p>
+            </div>
+            <!-- Medium Feature 4 -->
+            <div class="md:col-span-8 bg-surface-container-highest border-4 border-black p-10 neo-shadow-secondary">
+                <div class="flex flex-col md:flex-row justify-between items-start gap-8">
+                    <div class="max-w-md">
+                        <div class="text-primary font-headline font-black text-4xl mb-4 uppercase">Chaos Mode</div>
+                        <p class="font-body text-xl">Enter a 100-person chat room where every message is text-to-speech and the speed is uncapped. Absolute digital riot.</p>
+                    </div>
+                    <button class="w-full md:w-auto bg-black text-white border-4 border-white px-8 py-4 font-headline font-black uppercase hover:bg-white hover:text-black transition-none">
+                        Activate
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive CTA Section -->
+    <section class="py-32 px-6 md:px-16 text-center">
+        <div class="max-w-5xl mx-auto border-8 border-black bg-primary p-12 md:p-24 neo-shadow-lg -rotate-1">
+            <h2 class="font-headline font-black text-5xl md:text-8xl text-black uppercase leading-none mb-8">
+                Ready to <span class="text-white bg-black px-4">Vibe?</span>
+            </h2>
+            <p class="font-body text-xl md:text-3xl text-black font-black uppercase mb-12 tracking-tight">
+                Join the underground network. No surrender.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <a href="gender-selection.html" class="bg-black text-white text-3xl font-headline font-black uppercase px-12 py-8 border-4 border-black neo-shadow-secondary active-press transition-none decoration-none">
+                    Get Started Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="w-full px-10 py-16 flex flex-col md:flex-row justify-between items-center gap-8 bg-[#fed023] border-t-8 border-black font-['Epilogue'] font-extrabold uppercase text-black">
+        <div class="text-4xl font-black text-black">VIBECHAT</div>
+        <div class="flex flex-wrap justify-center gap-8 text-lg">
+            <a class="text-black underline hover:text-[#ff6d8d] transition-none hover:-rotate-1" href="#">MANIFESTO</a>
+            <a class="text-black hover:text-[#ff6d8d] transition-none hover:-rotate-1" href="#">PRIVACY</a>
+            <a class="text-black hover:text-[#ff6d8d] transition-none hover:-rotate-1" href="#">CHAOS_MODE</a>
+            <a class="text-black hover:text-[#ff6d8d] transition-none hover:-rotate-1" href="#">SUPPORT</a>
+        </div>
+        <div class="text-black tracking-widest text-center md:text-right">
+            ©2024 VIBECHAT. NO SURRENDER.
+        </div>
+    </footer>
+</body>
+</html>

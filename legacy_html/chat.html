@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@700;800;900&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-primary": "#594700",
+                "surface-bright": "#2c2c2c",
+                "on-tertiary-container": "#015a00",
+                "error-container": "#b92902",
+                "secondary-dim": "#e2165f",
+                "primary-container": "#ebbf01",
+                "on-primary-container": "#4d3d00",
+                "on-secondary-fixed": "#6e0028",
+                "surface": "#0e0e0e",
+                "secondary-fixed": "#ffc2ca",
+                "on-secondary": "#480018",
+                "error-dim": "#d53d18",
+                "on-primary-fixed": "#433500",
+                "inverse-primary": "#735c00",
+                "on-tertiary-fixed": "#014500",
+                "on-error-container": "#ffd2c8",
+                "tertiary-container": "#00fd00",
+                "outline": "#757575",
+                "surface-container": "#191919",
+                "tertiary-dim": "#01ed00",
+                "tertiary-fixed": "#00fd00",
+                "on-tertiary": "#026400",
+                "surface-container-lowest": "#000000",
+                "primary-fixed-dim": "#eec209",
+                "surface-container-low": "#131313",
+                "secondary": "#ff6d8d",
+                "on-surface-variant": "#ababab",
+                "on-secondary-container": "#fff6f5",
+                "primary-dim": "#eec209",
+                "primary-fixed": "#fed023",
+                "on-surface": "#ffffff",
+                "primary": "#fed023",
+                "error": "#ff7351",
+                "on-error": "#450900",
+                "secondary-fixed-dim": "#ffaeba",
+                "tertiary": "#9fff88",
+                "surface-container-high": "#1f1f1f",
+                "inverse-surface": "#f9f9f9",
+                "background": "#0e0e0e",
+                "surface-container-highest": "#262626",
+                "surface-tint": "#fed023",
+                "on-tertiary-fixed-variant": "#026500",
+                "on-primary-fixed-variant": "#655000",
+                "on-secondary-fixed-variant": "#a30040",
+                "secondary-container": "#bc004b",
+                "inverse-on-surface": "#555555",
+                "outline-variant": "#484848",
+                "surface-dim": "#0e0e0e",
+                "surface-variant": "#262626",
+                "tertiary-fixed-dim": "#01ed00",
+                "on-background": "#ffffff"
+              },
+              fontFamily: {
+                "headline": ["Epilogue"],
+                "body": ["Space Grotesk"],
+                "label": ["Space Grotesk"]
+              },
+              borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+        <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="text-on-background min-h-screen flex flex-col">
+    <!-- Top Navigation Bar -->
+    <nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-[#0e0e0e] border-b-4 border-black shadow-[4px_4px_0px_0px_#000000]">
+        <div class="text-3xl font-black italic text-[#fed023] tracking-tighter uppercase font-['Epilogue']"><a href="index.html">VIBECHAT</a></div>
+        <div class="hidden md:flex gap-8 font-['Epilogue'] font-black tracking-tighter uppercase">
+            <a class="text-white hover:bg-[#ff6d8d] hover:text-black transition-none px-2" href="lobby.html">CHANNELS</a>
+            <a class="text-[#fed023] underline decoration-4 px-2" href="#">CHAT</a>
+            <a class="text-white hover:bg-[#ff6d8d] hover:text-black transition-none px-2" href="#">HISTORY</a>
+            <a class="text-white hover:bg-[#ff6d8d] hover:text-black transition-none px-2" href="#">VIBES</a>
+        </div>
+        <div class="flex items-center gap-4">
+            <button class="material-symbols-outlined text-white p-2 border-4 border-black bg-surface-container shadow-[4px_4px_0px_0px_#000000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-none">person</button>
+            <button class="material-symbols-outlined text-white p-2 border-4 border-black bg-surface-container shadow-[4px_4px_0px_0px_#000000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-none">settings</button>
+        </div>
+    </nav>
+
+    <!-- Side Navigation (Web) -->
+    <aside class="hidden md:flex flex-col h-screen fixed left-0 top-0 z-40 bg-[#191919] border-r-4 border-black w-64 shadow-[8px_0px_0px_0px_#000000] pt-24">
+        <div class="px-6 mb-8">
+            <div class="text-2xl font-black text-[#fed023] font-['Epilogue']">VIBECHAT</div>
+            <div class="text-[10px] font-extrabold text-secondary tracking-[0.2em] font-['Epilogue']">RAW_MODE_ON</div>
+        </div>
+        <nav class="flex-1 flex flex-col gap-2">
+            <a class="text-white hover:text-[#9fff88] p-4 font-['Epilogue'] font-extrabold uppercase flex items-center gap-4 hover:bg-[#2c2c2c] transition-none" href="lobby.html">
+                <span class="material-symbols-outlined">forum</span> CHANNELS
+            </a>
+            <a class="bg-[#fed023] text-black border-2 border-black m-2 p-4 font-['Epilogue'] font-extrabold uppercase flex items-center gap-4 active:scale-95 transition-none" href="#">
+                <span class="material-symbols-outlined">chat_bubble</span> PEOPLE
+            </a>
+            <a class="text-white hover:text-[#9fff88] p-4 font-['Epilogue'] font-extrabold uppercase flex items-center gap-4 hover:bg-[#2c2c2c] transition-none" href="#">
+                <span class="material-symbols-outlined">history</span> HISTORY
+            </a>
+            <a class="text-white hover:text-[#9fff88] p-4 font-['Epilogue'] font-extrabold uppercase flex items-center gap-4 hover:bg-[#2c2c2c] transition-none" href="#">
+                <span class="material-symbols-outlined">bolt</span> VIBES
+            </a>
+        </nav>
+        <div class="p-4 mt-auto">
+            <button class="w-full py-4 bg-secondary text-black font-black font-['Epilogue'] border-4 border-black shadow-[4px_4px_0px_0px_#000000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-none uppercase">START_CHAT</button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col md:pl-64 pt-20 pb-16 md:pb-0">
+        <!-- Stranger Status Header -->
+        <div class="sticky top-20 z-30 bg-surface border-b-4 border-black p-4 md:p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-4 h-4 bg-tertiary border-2 border-black shadow-[2px_2px_0px_0px_#000000]"></div>
+                    <h2 class="text-2xl font-black font-['Epilogue'] uppercase tracking-tight">Stranger Status: <span class="text-primary">VIBING</span></h2>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-tertiary text-black px-3 py-1 text-xs font-bold border-2 border-black uppercase">#NEO_BRUTALISM</span>
+                    <span class="bg-secondary text-black px-3 py-1 text-xs font-bold border-2 border-black uppercase">#WEB3_ANARCHY</span>
+                    <span class="bg-primary text-black px-3 py-1 text-xs font-bold border-2 border-black uppercase">#DIGITAL_RIOT</span>
+                </div>
+            </div>
+            <div class="flex gap-3 w-full md:w-auto">
+                <button class="flex-1 md:flex-none bg-tertiary text-black px-6 py-2 font-black font-['Epilogue'] border-4 border-black shadow-[4px_4px_0px_0px_#000000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-none uppercase">NEXT MATCH</button>
+                <button class="flex-1 md:flex-none bg-error text-black px-6 py-2 font-black font-['Epilogue'] border-4 border-black shadow-[4px_4px_0px_0px_#000000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-none uppercase">DISCONNECT</button>
+            </div>
+        </div>
+
+        <!-- Chat Log -->
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-8 bg-[#0e0e0e] pb-32">
+            <!-- System Message -->
+            <div class="flex justify-center">
+                <div class="bg-surface-container-highest border-2 border-black px-4 py-2 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                    Encryption: ON | Connection: UNSTABLE | Reality: ANALOG
+                </div>
+            </div>
+            <!-- Stranger Message -->
+            <div class="flex flex-col items-start max-w-[85%] md:max-w-[60%]">
+                <div class="bg-white text-black p-4 border-4 border-black shadow-[6px_6px_0px_0px_#000000] font-medium leading-tight">
+                    Yo. Did you see the latest drop on the underground forum? The UI is literally melting.
+                </div>
+                <span class="mt-2 text-[10px] font-bold uppercase text-on-surface-variant">Stranger • 14:02</span>
+            </div>
+            <!-- User Message -->
+            <div class="flex flex-col items-end self-end max-w-[85%] md:max-w-[60%]">
+                <div class="bg-primary text-black p-4 border-4 border-black shadow-[-6px_6px_0px_0px_#000000] font-black leading-tight italic">
+                    YEAH. IT'S THE DIGITAL RIOT VIBE. NO BORDER-RADIUS ALLOWED.
+                </div>
+                <span class="mt-2 text-[10px] font-bold uppercase text-on-surface-variant">You • 14:03</span>
+            </div>
+            <!-- Stranger Message -->
+            <div class="flex flex-col items-start max-w-[85%] md:max-w-[60%]">
+                <div class="bg-white text-black p-4 border-4 border-black shadow-[6px_6px_0px_0px_#000000] font-medium leading-tight">
+                    Exactly. Minimalism was a cage. Brutalism is the breakout.
+                </div>
+                <div class="mt-4 grid grid-cols-2 gap-2">
+                    <img class="border-4 border-black shadow-[4px_4px_0px_0px_#000000] w-full aspect-square object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLxBNIwkN0nPQJQspw36X8Cm7jSZRxaMW9m6D7uqXFAK6T-bUQwPdnBFul5QxBPHZmTb4H6ATmwqNp26N1_wh2cZMe78yvrNd_rmnZZ8vsbV_NacxUyRBnKPyToFjmoUXpmE5cM_ICZ8uveJbQl3pbeNbKwiYBH4fELwtApgzHNLir3mEdgCG00fvzjXY4gUrDdtNlO2tUFcLocwg_4uAzZTw1bDGXE8wCe3YG1nmmPf-78vls-x-uDXq-rBvf0BySv9ejh6l1N1k"/>
+                    <img class="border-4 border-black shadow-[4px_4px_0px_0px_#000000] w-full aspect-square object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIHPil2wd4CqjNirVlKRTxLxHnF0Q0EOLU__x5f73-S4vYqq9GkS6EuubdQpws25-tUPK2JUsEOlaMsvhFQNSFDM3UIUpLt1_9t-tX1udYClp_jPgziI9YzSOrZQBhRbMVWPFNu8vzLiLiMhI2Bz_fuiSj4wc93hKiMwu3Y6ORB5yWS6gb7NdJTYP5kYjj6QqyV5Ura-khgpSZpVvTHKCJIqhgtr7lQv6IEK29LsDrvSC61vVx5yl3chjkVZneywknvDCbWOeiVT8"/>
+                </div>
+                <span class="mt-2 text-[10px] font-bold uppercase text-on-surface-variant">Stranger • 14:05</span>
+            </div>
+            <!-- User Message -->
+            <div class="flex flex-col items-end self-end max-w-[85%] md:max-w-[60%]">
+                <div class="bg-primary text-black p-4 border-4 border-black shadow-[-6px_6px_0px_0px_#000000] font-black leading-tight">
+                    HARD SHADOWS ONLY. IF IT'S NOT 4PX BLACK, IT DOESN'T EXIST.
+                </div>
+                <span class="mt-2 text-[10px] font-bold uppercase text-on-surface-variant">You • 14:06</span>
+            </div>
+            <!-- Stranger is typing... -->
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-secondary animate-pulse border border-black"></div>
+                <div class="w-2 h-2 bg-secondary animate-pulse border border-black delay-75"></div>
+                <div class="w-2 h-2 bg-secondary animate-pulse border border-black delay-150"></div>
+                <span class="text-[10px] font-bold uppercase text-secondary ml-2">Stranger is thinking...</span>
+            </div>
+        </div>
+
+        <!-- Input Area (Fixed Bottom) -->
+        <div class="fixed bottom-16 md:bottom-0 left-0 md:left-64 right-0 p-4 md:p-8 bg-surface border-t-4 border-black z-40">
+            <div class="max-w-6xl mx-auto flex gap-4">
+                <div class="relative flex-1">
+                    <input class="w-full bg-surface-container-highest text-white border-4 border-black p-4 focus:outline-none focus:border-primary focus:shadow-[4px_4px_0px_0px_#fed023] font-bold placeholder:text-outline uppercase transition-all" placeholder="TYPE YOUR MANIFESTO..." type="text"/>
+                    <div class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2">
+                        <button class="material-symbols-outlined text-white hover:text-primary">add_circle</button>
+                        <button class="material-symbols-outlined text-white hover:text-secondary">mood</button>
+                    </div>
+                </div>
+                <button class="bg-primary text-black px-8 py-4 border-4 border-black shadow-[6px_6px_0px_0px_#000000] font-black font-['Epilogue'] flex items-center gap-2 hover:bg-secondary active:translate-x-1 active:translate-y-1 active:shadow-none transition-none">
+                    SEND <span class="material-symbols-outlined font-black">send</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar (Mobile) -->
+    <nav class="fixed bottom-0 w-full z-50 flex justify-around items-stretch h-16 md:hidden bg-[#0e0e0e] border-t-4 border-black">
+        <a class="flex flex-col items-center justify-center bg-[#fed023] text-black h-full px-2 flex-1 active:translate-y-1 transition-none" href="#">
+            <span class="material-symbols-outlined">chat_bubble</span>
+            <span class="font-['Epilogue'] font-bold text-[10px] uppercase">CHAT</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-white h-full px-2 flex-1 hover:bg-[#ff6d8d] active:translate-y-1 transition-none" href="#">
+            <span class="material-symbols-outlined">explore</span>
+            <span class="font-['Epilogue'] font-bold text-[10px] uppercase">DISCOVER</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-white h-full px-2 flex-1 hover:bg-[#ff6d8d] active:translate-y-1 transition-none" href="#">
+            <span class="material-symbols-outlined">sensors</span>
+            <span class="font-['Epilogue'] font-bold text-[10px] uppercase">LIVE</span>
+        </a>
+        <a class="flex flex-col items-center justify-center text-white h-full px-2 flex-1 hover:bg-[#ff6d8d] active:translate-y-1 transition-none" href="#">
+            <span class="material-symbols-outlined">account_circle</span>
+            <span class="font-['Epilogue'] font-bold text-[10px] uppercase">PROFILE</span>
+        </a>
+    </nav>
+</body>
+</html>
