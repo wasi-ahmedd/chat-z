@@ -7,7 +7,9 @@ import { v4 as uuidv4 } from 'uuid'
 
 const PORT = process.env.PORT || 3001
 const JWT_SECRET = process.env.JWT_SECRET || 'vibechat-secret-change-in-production'
-const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://127.0.0.1:5173'
+const CORS_ORIGINS = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',')
+  : ['http://localhost:5173', 'http://127.0.0.1:5173']
 const SESSION_COOKIE = 'vibechat_session'
 const SESSION_TTL_MS = 24 * 60 * 60 * 1000
 const VALID_GENDERS = ['male', 'female', 'other']
@@ -22,13 +24,13 @@ const httpServer = createServer(app)
 
 const io = new Server(httpServer, {
   cors: {
-    origin: CORS_ORIGIN,
+    origin: CORS_ORIGINS,
     methods: ['GET', 'POST', 'PATCH'],
     credentials: true
   }
 })
 
-app.use(cors({ origin: CORS_ORIGIN, credentials: true }))
+app.use(cors({ origin: CORS_ORIGINS, credentials: true }))
 app.use(express.json())
 
 const users = new Map()

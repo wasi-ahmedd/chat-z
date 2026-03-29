@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,800;0,900;1,800;1,900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed": "#6e0028",
+                        "surface-container-highest": "#262626",
+                        "inverse-on-surface": "#555555",
+                        "surface-tint": "#fed023",
+                        "on-secondary-container": "#fff6f5",
+                        "error-dim": "#d53d18",
+                        "surface-bright": "#2c2c2c",
+                        "error-container": "#b92902",
+                        "surface-container-high": "#1f1f1f",
+                        "on-primary": "#594700",
+                        "surface-container-lowest": "#000000",
+                        "surface-variant": "#262626",
+                        "secondary": "#ff6d8d",
+                        "primary-container": "#ebbf01",
+                        "on-surface": "#ffffff",
+                        "on-error": "#450900",
+                        "tertiary-fixed": "#00fd00",
+                        "on-tertiary": "#026400",
+                        "on-surface-variant": "#ababab",
+                        "on-error-container": "#ffd2c8",
+                        "secondary-container": "#bc004b",
+                        "surface-container": "#191919",
+                        "surface-container-low": "#131313",
+                        "secondary-fixed-dim": "#ffaeba",
+                        "outline": "#757575",
+                        "on-primary-fixed-variant": "#655000",
+                        "primary-dim": "#eec209",
+                        "outline-variant": "#484848",
+                        "on-tertiary-fixed-variant": "#026500",
+                        "on-secondary": "#480018",
+                        "on-primary-fixed": "#433500",
+                        "tertiary-container": "#00fd00",
+                        "tertiary-fixed-dim": "#01ed00",
+                        "tertiary-dim": "#01ed00",
+                        "on-secondary-fixed-variant": "#a30040",
+                        "surface-dim": "#0e0e0e",
+                        "tertiary": "#9fff88",
+                        "primary-fixed-dim": "#eec209",
+                        "background": "#0e0e0e",
+                        "on-background": "#ffffff",
+                        "error": "#ff7351",
+                        "on-tertiary-container": "#015a00",
+                        "on-primary-container": "#4d3d00",
+                        "secondary-fixed": "#ffc2ca",
+                        "primary": "#fed023",
+                        "inverse-primary": "#735c00",
+                        "on-tertiary-fixed": "#014500",
+                        "surface": "#0e0e0e",
+                        "inverse-surface": "#f9f9f9",
+                        "primary-fixed": "#fed023",
+                        "secondary-dim": "#e2165f"
+                    },
+                    fontFamily: {
+                        "headline": ["Epilogue"],
+                        "body": ["Space Grotesk"],
+                        "label": ["Space Grotesk"]
+                    },
+                    borderRadius: { "DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0e0e0e;
+        }
+
+        .neo-brutal-shadow {
+            box-shadow: 8px 8px 0px 0px #000000;
+        }
+
+        .neo-brutal-shadow-sm {
+            box-shadow: 4px 4px 0px 0px #000000;
+        }
+
+        .active-press:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px 0px #000000;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-surface overflow-hidden">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-black/70 backdrop-blur-sm z-0 flex items-center justify-center p-4">
+        <!-- Profile Modal Container -->
+        <div
+            class="relative w-full max-w-md bg-[#F0F0F0] border-[4px] border-black neo-brutal-shadow flex flex-col z-10 overflow-hidden">
+            <!-- Header section -->
+            <div class="bg-primary p-6 border-b-[4px] border-black flex justify-between items-start">
+                <h1 class="font-headline font-black italic text-4xl tracking-tighter text-black uppercase">
+                    VIBE_PROFILE
+                </h1>
+                <button
+                    class="bg-white border-2 border-black p-1 hover:bg-error transition-colors active-press neo-brutal-shadow-sm">
+                    <span class="material-symbols-outlined block text-black">close</span>
+                </button>
+            </div>
+            <!-- Avatar & Badge Row -->
+            <div class="p-8 flex gap-6 items-center">
+                <div
+                    class="w-32 h-32 bg-white border-[4px] border-black flex items-center justify-center neo-brutal-shadow-sm relative group overflow-hidden">
+                    <!-- Placeholder image with neo-brutal styling -->
+                    <img alt="User Avatar Placeholder" class="absolute inset-0 w-full h-full object-cover opacity-20"
+                        data-alt="Abstract neo-brutalism art piece with high contrast black and yellow geometric patterns and grainy film texture"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXJUC-dzwnma95Dg8lZYh6ZD62d4Nmb29F4wVdXeSoVyKNHnKAhRreSdX_6wCyYHqppxX9ZH7VIi9_trETtww4nQwMS2mINIJ0hDRKq7e5T_67qU5TsqH99KuKWk7WV4UNc3ksySOL18qoplmDqKUyYSZ43XzhQsD76QHefm_qSVl_zUSOalgWqwUP-b_X0rrT1KNlpnS8otVDm818HV9aBge3kJXHotzsoaeEWyXgHR5OORez_a4dD6Ff-bm-ON_heeTA2LdWd60" />
+                    <span class="text-6xl font-headline font-black text-black z-10">?</span>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <span
+                        class="bg-secondary text-black font-headline font-black px-4 py-1 border-[3px] border-black inline-block text-sm tracking-widest neo-brutal-shadow-sm">
+                        RIOTER
+                    </span>
+                    <div class="mt-2">
+                        <p class="text-xs font-bold text-black/60 uppercase tracking-widest">Status</p>
+                        <p class="text-black font-black uppercase text-lg">ONLINE_NOW</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Account Info -->
+            <div class="px-8 pb-4">
+                <div class="border-[4px] border-black p-4 bg-white neo-brutal-shadow-sm">
+                    <h3
+                        class="font-headline font-black text-black border-b-[3px] border-black mb-4 pb-1 uppercase italic">
+                        Account Info</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-end border-b-2 border-black/10 pb-1">
+                            <span class="text-xs font-bold text-black/50 uppercase tracking-wider">Username</span>
+                            <span class="text-black font-black uppercase font-headline">NEON_PHANTOM</span>
+                        </div>
+                        <div class="flex justify-between items-end border-b-2 border-black/10 pb-1">
+                            <span class="text-xs font-bold text-black/50 uppercase tracking-wider">Joined</span>
+                            <span
+                                class="text-black font-black uppercase font-headline text-sm tracking-tighter">OCT_2026</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Preferences -->
+            <div class="px-8 py-4">
+                <div class="border-[4px] border-black p-4 bg-surface-bright text-white neo-brutal-shadow-sm">
+                    <h3
+                        class="font-headline font-black text-primary border-b-[3px] border-primary mb-4 pb-1 uppercase italic">
+                        Preferences</h3>
+                    <div class="space-y-4">
+                        <!-- Switch 1: Dark Mode -->
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-black uppercase tracking-tight">Dark Mode</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input checked="" class="sr-only peer" type="checkbox" />
+                                <div
+                                    class="w-14 h-8 bg-black border-[3px] border-white peer-checked:bg-tertiary transition-all">
+                                </div>
+                                <div
+                                    class="absolute left-1 top-1 w-6 h-6 bg-white border-[2px] border-black peer-checked:translate-x-6 transition-transform">
+                                </div>
+                            </label>
+                        </div>
+                        <!-- Switch 2: Sound Effects -->
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-black uppercase tracking-tight">Sound Effects</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input class="sr-only peer" type="checkbox" />
+                                <div
+                                    class="w-14 h-8 bg-black border-[3px] border-white peer-checked:bg-tertiary transition-all">
+                                </div>
+                                <div
+                                    class="absolute left-1 top-1 w-6 h-6 bg-white border-[2px] border-black peer-checked:translate-x-6 transition-transform">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Actions -->
+            <div class="p-8 flex flex-col gap-4">
+                <button
+                    class="w-full bg-primary text-black font-headline font-black text-xl py-4 border-[4px] border-black neo-brutal-shadow-sm active-press hover:bg-primary-container transition-all uppercase italic tracking-tighter">
+                    UPGRADE TO PREMIUM
+                </button>
+                <button
+                    class="w-full bg-[#ff4d4d] text-white font-headline font-black text-lg py-3 border-[4px] border-black neo-brutal-shadow-sm active-press hover:bg-error-dim transition-all uppercase tracking-widest flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined font-black" data-icon="logout">logout</span>
+                    LOGOUT
+                </button>
+            </div>
+            <!-- Decorative Halftone Pattern Strip -->
+            <div class="h-4 w-full bg-black flex overflow-hidden">
+                <div class="h-full w-full opacity-30"
+                    style="background-image: radial-gradient(#fed023 1px, transparent 0); background-size: 4px 4px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Background Decoration for high-fidelity feel -->
+    <div class="fixed inset-0 pointer-events-none -z-10 grid grid-cols-6 grid-rows-6 opacity-20">
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10 bg-primary/5"></div>
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10 bg-secondary/5"></div>
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10 bg-tertiary/5"></div>
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10 bg-primary/10"></div>
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10"></div>
+        <div class="border-[1px] border-white/10"></div>
+    </div>
+</body>
+
+</html>

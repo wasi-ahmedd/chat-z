@@ -1,9 +1,9 @@
-import { Routes, Route } from 'react-router-dom'
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
-import GenderSelection from './pages/GenderSelection'
+import Onboarding from './pages/Onboarding'
 import Lobby from './pages/Lobby'
 import ChatRoom from './pages/ChatRoom'
-import History from './pages/History'
 import { SocketProvider } from './context/SocketContext'
 
 function App() {
@@ -11,10 +11,10 @@ function App() {
     <SocketProvider>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/onboarding" element={<GenderSelection />} />
+        <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/lobby" element={<Lobby />} />
         <Route path="/chat" element={<ChatRoom />} />
-        <Route path="/history" element={<History />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </SocketProvider>
   )

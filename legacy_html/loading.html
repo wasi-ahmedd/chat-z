@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VIBECHAT | LOADING</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@1,900&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-secondary": "#480018",
+            "outline-variant": "#484848",
+            "on-primary-container": "#4d3d00",
+            "surface-container-highest": "#262626",
+            "secondary-fixed-dim": "#ffaeba",
+            "surface-container": "#191919",
+            "primary-container": "#ebbf01",
+            "primary-fixed": "#fed023",
+            "outline": "#757575",
+            "surface-container-lowest": "#000000",
+            "inverse-primary": "#735c00",
+            "tertiary-fixed": "#00fd00",
+            "background": "#0e0e0e",
+            "secondary-fixed": "#ffc2ca",
+            "on-primary-fixed-variant": "#655000",
+            "on-error": "#450900",
+            "on-error-container": "#ffd2c8",
+            "tertiary-fixed-dim": "#01ed00",
+            "primary-dim": "#eec209",
+            "on-tertiary-fixed": "#014500",
+            "error": "#ff7351",
+            "surface": "#0e0e0e",
+            "on-surface": "#ffffff",
+            "tertiary-dim": "#01ed00",
+            "on-primary-fixed": "#433500",
+            "error-dim": "#d53d18",
+            "on-background": "#ffffff",
+            "on-surface-variant": "#ababab",
+            "on-secondary-fixed-variant": "#a30040",
+            "surface-variant": "#262626",
+            "on-tertiary": "#026400",
+            "on-secondary-fixed": "#6e0028",
+            "secondary": "#ff6d8d",
+            "surface-dim": "#0e0e0e",
+            "surface-container-high": "#1f1f1f",
+            "secondary-dim": "#e2165f",
+            "on-tertiary-container": "#015a00",
+            "primary-fixed-dim": "#eec209",
+            "tertiary": "#9fff88",
+            "tertiary-container": "#00fd00",
+            "secondary-container": "#bc004b",
+            "surface-tint": "#fed023",
+            "surface-container-low": "#131313",
+            "on-secondary-container": "#fff6f5",
+            "on-primary": "#594700",
+            "inverse-on-surface": "#555555",
+            "surface-bright": "#2c2c2c",
+            "error-container": "#b92902",
+            "primary": "#fed023",
+            "on-tertiary-fixed-variant": "#026500",
+            "inverse-surface": "#f9f9f9"
+          },
+          fontFamily: {
+            "headline": ["Epilogue"],
+            "body": ["Space Grotesk"],
+            "label": ["Space Grotesk"]
+          },
+          borderRadius: {
+            "DEFAULT": "0px",
+            "lg": "0px",
+            "xl": "0px",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .halftone {
+      background-image: radial-gradient(#ffffff 1px, transparent 1px);
+      background-size: 10px 10px;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+    }
+    .animate-pulse-dot {
+      animation: pulse-dot 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes bar-grow {
+      0% { width: 0%; }
+      30% { width: 45%; }
+      70% { width: 62%; }
+      100% { width: 88%; }
+    }
+    .animate-progress {
+      animation: bar-grow 4s ease-out forwards;
+    }
+
+    @keyframes logo-float {
+      0%, 100% { transform: translateY(0) skewX(-12deg); }
+      50% { transform: translateY(-10px) skewX(-12deg); }
+    }
+    .animate-logo {
+      animation: logo-float 3s ease-in-out infinite;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      animation: marquee 20s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-background font-body text-on-background min-h-screen overflow-hidden flex flex-col justify-center items-center relative">
+<!-- Halftone Overlay -->
+<div class="absolute inset-0 halftone opacity-10 pointer-events-none z-0"></div>
+<!-- Main Container -->
+<main class="z-10 w-full max-w-4xl px-8 flex flex-col items-center gap-16">
+<!-- Logo Section -->
+<div class="relative">
+<h1 class="font-headline italic font-black text-8xl md:text-[12rem] text-primary tracking-tighter leading-none animate-logo select-none drop-shadow-[8px_8px_0px_#000000]">
+        VIBECHAT
+      </h1>
+<!-- Aesthetic Clash Element -->
+<div class="absolute -top-6 -right-6 bg-secondary text-black font-black text-xl px-4 py-2 border-4 border-black shadow-[4px_4px_0px_0px_#000000] -rotate-6">
+        LOADING...
+      </div>
+</div>
+<!-- Status Indicators -->
+<div class="flex gap-6 items-center">
+<div class="w-6 h-6 bg-tertiary border-4 border-black animate-pulse-dot" style="animation-delay: 0s;"></div>
+<div class="w-6 h-6 bg-tertiary border-4 border-black animate-pulse-dot" style="animation-delay: 0.2s;"></div>
+<div class="w-6 h-6 bg-tertiary border-4 border-black animate-pulse-dot" style="animation-delay: 0.4s;"></div>
+</div>
+<!-- Progress Wrapper -->
+<div class="w-full max-w-2xl">
+<div class="flex justify-between items-end mb-4">
+<span class="font-headline font-black text-primary text-3xl italic">STABILIZING FREQUENCIES</span>
+<span class="font-headline font-black text-white text-3xl italic">88%</span>
+</div>
+<!-- Progress Bar Container -->
+<div class="w-full h-12 bg-surface-container border-4 border-black shadow-[8px_8px_0px_0px_#000000] relative overflow-hidden">
+<!-- Progress Fill -->
+<div class="h-full bg-primary border-r-4 border-black animate-progress flex items-center justify-end px-4">
+<div class="h-full w-2 bg-black/20 ml-1"></div>
+<div class="h-full w-2 bg-black/20 ml-1"></div>
+<div class="h-full w-2 bg-black/20 ml-1"></div>
+</div>
+</div>
+</div>
+<!-- System Messages Bento-style -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mt-8">
+<div class="bg-surface-container border-4 border-black p-4 flex flex-col gap-2 shadow-[4px_4px_0px_0px_#000000]">
+<span class="text-secondary font-bold text-xs tracking-widest uppercase">Encryption</span>
+<p class="text-white font-medium text-sm">ENABLING CHAOTIC-GOOD SECURITY PROTOCOLS</p>
+</div>
+<div class="bg-surface-container border-4 border-black p-4 flex flex-col gap-2 shadow-[4px_4px_0px_0px_#000000]">
+<span class="text-tertiary font-bold text-xs tracking-widest uppercase">Network</span>
+<p class="text-white font-medium text-sm">SYNCING EMOTIONAL METADATA CHANNELS</p>
+</div>
+<div class="bg-surface-container border-4 border-black p-4 flex flex-col gap-2 shadow-[4px_4px_0px_0px_#000000]">
+<span class="text-primary font-bold text-xs tracking-widest uppercase">Mood</span>
+<p class="text-white font-medium text-sm">CALIBRATING NEON SATURATION LEVELS</p>
+</div>
+</div>
+</main>
+<!-- Bottom Visual Anchor -->
+<div class="fixed bottom-0 left-0 w-full h-8 bg-primary border-t-4 border-black flex items-center px-6 overflow-hidden">
+<div class="flex gap-12 whitespace-nowrap animate-marquee">
+<span class="font-black text-black text-xs tracking-widest">SYSTEM ONLINE // SYSTEM ONLINE // SYSTEM ONLINE // SYSTEM ONLINE // SYSTEM ONLINE // SYSTEM ONLINE // SYSTEM ONLINE // SYSTEM ONLINE // </span>
+<span class="font-black text-black text-xs tracking-widest">SYSTEM ONLINE // SYSTEM ONLINE // SYSTEM ONLINE // SYSTEM ONLINE // SYSTEM ONLINE // SYSTEM ONLINE // SYSTEM ONLINE // SYSTEM ONLINE // </span>
+</div>
+</div>
+<!-- Aesthetic Floating Icon -->
+<div class="fixed top-12 left-12 w-16 h-16 bg-white border-4 border-black flex items-center justify-center shadow-[4px_4px_0px_0px_#fed023] rotate-12">
+<span class="material-symbols-outlined text-black text-4xl" style="font-variation-settings: 'FILL' 1;">
+      bolt
+    </span>
+</div>
+<!-- Aesthetic Floating Icon 2 -->
+<div class="fixed bottom-24 right-12 w-20 h-20 bg-secondary border-4 border-black flex items-center justify-center shadow-[4px_4px_0px_0px_#000000] -rotate-12">
+<span class="material-symbols-outlined text-black text-5xl">
+      sensors
+    </span>
+</div>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&amp;family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary": "#480018",
+              "outline-variant": "#484848",
+              "on-primary-container": "#4d3d00",
+              "surface-container-highest": "#262626",
+              "secondary-fixed-dim": "#ffaeba",
+              "surface-container": "#191919",
+              "primary-container": "#ebbf01",
+              "primary-fixed": "#fed023",
+              "outline": "#757575",
+              "surface-container-lowest": "#000000",
+              "inverse-primary": "#735c00",
+              "tertiary-fixed": "#00fd00",
+              "background": "#0e0e0e",
+              "secondary-fixed": "#ffc2ca",
+              "on-primary-fixed-variant": "#655000",
+              "on-error": "#450900",
+              "on-error-container": "#ffd2c8",
+              "tertiary-fixed-dim": "#01ed00",
+              "primary-dim": "#eec209",
+              "on-tertiary-fixed": "#014500",
+              "error": "#ff7351",
+              "surface": "#0e0e0e",
+              "on-surface": "#ffffff",
+              "tertiary-dim": "#01ed00",
+              "on-primary-fixed": "#433500",
+              "error-dim": "#d53d18",
+              "on-background": "#ffffff",
+              "on-surface-variant": "#ababab",
+              "on-secondary-fixed-variant": "#a30040",
+              "surface-variant": "#262626",
+              "on-tertiary": "#026400",
+              "on-secondary-fixed": "#6e0028",
+              "secondary": "#ff6d8d",
+              "surface-dim": "#0e0e0e",
+              "surface-container-high": "#1f1f1f",
+              "secondary-dim": "#e2165f",
+              "on-tertiary-container": "#015a00",
+              "primary-fixed-dim": "#eec209",
+              "tertiary": "#9fff88",
+              "tertiary-container": "#00fd00",
+              "secondary-container": "#bc004b",
+              "surface-tint": "#fed023",
+              "surface-container-low": "#131313",
+              "on-secondary-container": "#fff6f5",
+              "on-primary": "#594700",
+              "inverse-on-surface": "#555555",
+              "surface-bright": "#2c2c2c",
+              "error-container": "#b92902",
+              "primary": "#fed023",
+              "on-tertiary-fixed-variant": "#026500",
+              "inverse-surface": "#f9f9f9"
+            },
+            fontFamily: {
+              "headline": ["Epilogue"],
+              "body": ["Space Grotesk"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px #000000;
+        }
+        .neo-shadow-lg {
+            box-shadow: 8px 8px 0px 0px #000000;
+        }
+        .neo-shadow-active {
+            box-shadow: 0px 0px 0px 0px #000000;
+            transform: translate(4px, 4px);
+        }
+        /* Custom Toggle Styling */
+        .neo-toggle:checked + .neo-toggle-label {
+            background-color: #9fff88;
+        }
+        .neo-toggle:checked + .neo-toggle-label .neo-toggle-dot {
+            transform: translateX(24px);
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-[#0e0e0e] border-b-4 border-black shadow-[4px_4px_0px_0px_#000000]">
+<div class="flex items-center gap-4">
+<span class="font-['Epilogue'] font-black uppercase tracking-tighter text-3xl text-[#fed023] italic">VIBECHAT</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 border-4 border-black bg-surface text-white hover:bg-[#fed023] hover:text-black transition-colors active:translate-x-1 active:translate-y-1 active:shadow-none neo-shadow">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="p-2 border-4 border-black bg-[#fed023] text-black transition-colors active:translate-x-1 active:translate-y-1 active:shadow-none neo-shadow">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</nav>
+<main class="pt-28 pb-32 px-4 max-w-4xl mx-auto space-y-12">
+<!-- Header Section -->
+<header class="mb-16">
+<h1 class="font-headline font-black text-6xl md:text-8xl text-primary uppercase leading-none tracking-tighter mb-4">
+                Settings
+            </h1>
+<div class="h-2 w-32 bg-secondary border-2 border-black neo-shadow"></div>
+</header>
+<!-- Account Section -->
+<section class="space-y-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-4xl">person</span>
+<h2 class="font-headline font-black text-3xl uppercase tracking-tight">Account</h2>
+</div>
+<div class="grid grid-cols-1 gap-0 border-4 border-black bg-surface-container neo-shadow">
+<!-- Profile Item -->
+<div class="flex items-center justify-between p-6 border-b-4 border-black hover:bg-surface-bright transition-colors group">
+<div class="flex flex-col">
+<span class="font-headline font-extrabold text-xl uppercase text-primary">Anonymous Handle</span>
+<span class="text-on-surface-variant font-bold">@NeonShadow_99</span>
+</div>
+<button class="px-6 py-2 border-4 border-black bg-primary text-black font-black uppercase neo-shadow hover:bg-secondary transition-all active:translate-x-1 active:translate-y-1 active:shadow-none">
+                        Edit
+                    </button>
+</div>
+<!-- Email Item -->
+<div class="flex items-center justify-between p-6 hover:bg-surface-bright transition-colors">
+<div class="flex flex-col">
+<span class="font-headline font-extrabold text-xl uppercase text-primary">Recovery Email</span>
+<span class="text-on-surface-variant font-bold">shadow****@proton.me</span>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Notifications Section -->
+<section class="space-y-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary text-4xl">notifications_active</span>
+<h2 class="font-headline font-black text-3xl uppercase tracking-tight">Notifications</h2>
+</div>
+<div class="grid grid-cols-1 border-4 border-black bg-surface-container neo-shadow">
+<!-- Push Notification Toggle -->
+<div class="flex items-center justify-between p-6 border-b-4 border-black">
+<div class="flex flex-col max-w-[70%]">
+<span class="font-headline font-extrabold text-xl uppercase text-primary">Push Alerts</span>
+<p class="text-on-surface-variant text-sm font-bold">Get pinged when a vibe match is found in your area.</p>
+</div>
+<div class="relative inline-block w-14 h-8">
+<input checked="" class="sr-only neo-toggle" id="push-toggle" type="checkbox"/>
+<label class="neo-toggle-label absolute inset-0 cursor-pointer bg-surface-container-highest border-4 border-black transition-colors flex items-center p-1" for="push-toggle">
+<span class="neo-toggle-dot w-4 h-4 bg-white border-2 border-black transition-transform duration-200"></span>
+</label>
+</div>
+</div>
+<!-- Vibe Alerts Toggle -->
+<div class="flex items-center justify-between p-6">
+<div class="flex flex-col max-w-[70%]">
+<span class="font-headline font-extrabold text-xl uppercase text-primary">Stealth Mode</span>
+<p class="text-on-surface-variant text-sm font-bold">Silence all sounds. Only haptic buzzes allowed.</p>
+</div>
+<div class="relative inline-block w-14 h-8">
+<input class="sr-only neo-toggle" id="stealth-toggle" type="checkbox"/>
+<label class="neo-toggle-label absolute inset-0 cursor-pointer bg-surface-container-highest border-4 border-black transition-colors flex items-center p-1" for="stealth-toggle">
+<span class="neo-toggle-dot w-4 h-4 bg-white border-2 border-black transition-transform duration-200"></span>
+</label>
+</div>
+</div>
+</div>
+</section>
+<!-- Privacy Section -->
+<section class="space-y-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-4xl">security</span>
+<h2 class="font-headline font-black text-3xl uppercase tracking-tight">Privacy</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-0 border-4 border-black neo-shadow">
+<div class="p-8 bg-surface-container-high border-b-4 md:border-b-0 md:border-r-4 border-black space-y-4">
+<span class="font-headline font-black text-2xl uppercase block text-tertiary">Ghost Mode</span>
+<p class="text-on-surface-variant font-bold leading-tight">Your location is scrambled every 30 seconds. Total anonymity.</p>
+<button class="w-full py-3 border-4 border-black bg-tertiary text-black font-black uppercase neo-shadow hover:neo-shadow-lg active:neo-shadow-active transition-all">
+                        Enable Ghost
+                    </button>
+</div>
+<div class="p-8 bg-surface-container-high space-y-4">
+<span class="font-headline font-black text-2xl uppercase block text-secondary">Data Shredder</span>
+<p class="text-on-surface-variant font-bold leading-tight">Wipe all message history and media from the server instantly.</p>
+<button class="w-full py-3 border-4 border-black bg-error text-white font-black uppercase neo-shadow hover:neo-shadow-lg active:neo-shadow-active transition-all">
+                        Shred Data
+                    </button>
+</div>
+</div>
+</section>
+<!-- Appearance Section -->
+<section class="space-y-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-4xl">palette</span>
+<h2 class="font-headline font-black text-3xl uppercase tracking-tight">Appearance</h2>
+</div>
+<div class="p-8 border-4 border-black bg-surface-container neo-shadow">
+<span class="font-headline font-extrabold text-xl uppercase text-primary mb-6 block">Color Profile</span>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<button class="aspect-square border-4 border-black bg-primary flex flex-col items-center justify-center gap-2 group hover:scale-105 transition-transform">
+<div class="w-8 h-8 bg-black"></div>
+<span class="text-xs font-black text-black">RETRO</span>
+</button>
+<button class="aspect-square border-4 border-black bg-secondary flex flex-col items-center justify-center gap-2 group hover:scale-105 transition-transform">
+<div class="w-8 h-8 bg-black"></div>
+<span class="text-xs font-black text-black">CYBER</span>
+</button>
+<button class="aspect-square border-4 border-black bg-tertiary flex flex-col items-center justify-center gap-2 group hover:scale-105 transition-transform">
+<div class="w-8 h-8 bg-black"></div>
+<span class="text-xs font-black text-black">TOXIC</span>
+</button>
+<button class="aspect-square border-4 border-black bg-white flex flex-col items-center justify-center gap-2 group hover:scale-105 transition-transform">
+<div class="w-8 h-8 bg-black"></div>
+<span class="text-xs font-black text-black">STARK</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Danger Zone -->
+<div class="pt-12">
+<button class="w-full py-6 border-4 border-black bg-surface-container-lowest text-error font-headline font-black text-2xl uppercase tracking-widest neo-shadow hover:bg-error hover:text-white transition-all active:translate-x-1 active:translate-y-1 active:shadow-none">
+                Terminate Account
+            </button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-stretch h-20 bg-[#0e0e0e] border-t-4 border-black">
+<button class="flex flex-col items-center justify-center text-white p-2 h-full w-full hover:bg-[#9fff88] hover:text-black active:scale-95 transition-transform">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="font-['Epilogue'] font-extrabold text-[10px] tracking-widest mt-1 uppercase">CHATS</span>
+</button>
+<button class="flex flex-col items-center justify-center text-white p-2 h-full w-full hover:bg-[#9fff88] hover:text-black active:scale-95 transition-transform">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-['Epilogue'] font-extrabold text-[10px] tracking-widest mt-1 uppercase">DISCOVER</span>
+</button>
+<button class="flex flex-col items-center justify-center text-white p-2 h-full w-full hover:bg-[#9fff88] hover:text-black active:scale-95 transition-transform">
+<span class="material-symbols-outlined">sensors</span>
+<span class="font-['Epilogue'] font-extrabold text-[10px] tracking-widest mt-1 uppercase">LIVE</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-[#ff6d8d] text-black p-2 h-full w-full active:scale-95 transition-transform">
+<span class="material-symbols-outlined">face</span>
+<span class="font-['Epilogue'] font-extrabold text-[10px] tracking-widest mt-1 uppercase">MOOD</span>
+</button>
+</nav>
+</body>
+</html>

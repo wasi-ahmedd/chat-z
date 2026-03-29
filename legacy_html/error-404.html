@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>404 - SIGNAL LOST | VIBECHAT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@800;900&amp;family=Space+Grotesk:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary": "#480018",
+                        "outline-variant": "#484848",
+                        "on-primary-container": "#4d3d00",
+                        "surface-container-highest": "#262626",
+                        "secondary-fixed-dim": "#ffaeba",
+                        "surface-container": "#191919",
+                        "primary-container": "#ebbf01",
+                        "primary-fixed": "#fed023",
+                        "outline": "#757575",
+                        "surface-container-lowest": "#000000",
+                        "inverse-primary": "#735c00",
+                        "tertiary-fixed": "#00fd00",
+                        "background": "#0e0e0e",
+                        "secondary-fixed": "#ffc2ca",
+                        "on-primary-fixed-variant": "#655000",
+                        "on-error": "#450900",
+                        "on-error-container": "#ffd2c8",
+                        "tertiary-fixed-dim": "#01ed00",
+                        "primary-dim": "#eec209",
+                        "on-tertiary-fixed": "#014500",
+                        "error": "#ff7351",
+                        "surface": "#0e0e0e",
+                        "on-surface": "#ffffff",
+                        "tertiary-dim": "#01ed00",
+                        "on-primary-fixed": "#433500",
+                        "error-dim": "#d53d18",
+                        "on-background": "#ffffff",
+                        "on-surface-variant": "#ababab",
+                        "on-secondary-fixed-variant": "#a30040",
+                        "surface-variant": "#262626",
+                        "on-tertiary": "#026400",
+                        "on-secondary-fixed": "#6e0028",
+                        "secondary": "#ff6d8d",
+                        "surface-dim": "#0e0e0e",
+                        "surface-container-high": "#1f1f1f",
+                        "secondary-dim": "#e2165f",
+                        "on-tertiary-container": "#015a00",
+                        "primary-fixed-dim": "#eec209",
+                        "tertiary": "#9fff88",
+                        "tertiary-container": "#00fd00",
+                        "secondary-container": "#bc004b",
+                        "surface-tint": "#fed023",
+                        "surface-container-low": "#131313",
+                        "on-secondary-container": "#fff6f5",
+                        "on-primary": "#594700",
+                        "inverse-on-surface": "#555555",
+                        "surface-bright": "#2c2c2c",
+                        "error-container": "#b92902",
+                        "primary": "#fed023",
+                        "on-tertiary-fixed-variant": "#026500",
+                        "inverse-surface": "#f9f9f9"
+                    },
+                    fontFamily: {
+                        "headline": ["Epilogue"],
+                        "body": ["Space Grotesk"],
+                        "label": ["Space Grotesk"]
+                    },
+                    borderRadius: {
+                        "none": "0px",
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-ticker {
+            display: flex;
+            width: fit-content;
+            animation: ticker 20s linear infinite;
+        }
+        .neo-shadow {
+            box-shadow: 4px 4px 0px 0px #000000;
+        }
+        .neo-shadow-lg {
+            box-shadow: 8px 8px 0px 0px #000000;
+        }
+        .neo-shadow-pink {
+            box-shadow: 8px 8px 0px 0px #ff6d8d;
+        }
+        .glitch-text {
+            text-shadow: 4px 0px 0px #ff6d8d, -4px 0px 0px #9fff88;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body min-h-screen flex flex-col overflow-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-[#0e0e0e] border-b-4 border-black shadow-[4px_4px_0px_0px_#000000]">
+<div class="flex items-center gap-2">
+<span class="text-3xl font-black text-[#fed023] italic font-['Epilogue'] uppercase tracking-tighter">VIBECHAT</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-white hover:bg-[#fed023] hover:text-black transition-colors active:translate-x-1 active:translate-y-1 active:shadow-none">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="p-2 text-white hover:bg-[#fed023] hover:text-black transition-colors active:translate-x-1 active:translate-y-1 active:shadow-none">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center relative p-6 mt-20">
+<!-- Background Noise/Texture Simulation -->
+<div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWIHLY9aqQzcxa2hoIJFFXHj6kyWxTfkSW44Xif8zDwlxjCX8HSExVxrzNlH9GLhTikJmoxoP1gCLayD1_Rz6l2_ql8qqQcmRQFqY3W6Rl3Cg6ZpEYiCvi-P2Ut8rU8cx7ZkbxD_PAsMUvq6bErzlmkIvGDY67sO_KI6IWfgkF6LgjJCAheBvufTk7B_m11oXxGPAZ5sa6aZTlV36NrwOLgZgG1gwGfxiIV0fMPuFcEoVgFTpHcIcoDGH1ypU76_wdufZK1g7c6QE');"></div>
+<!-- Asymmetric Layout Container -->
+<div class="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+<!-- Left Column: Large 404 -->
+<div class="md:col-span-7 flex flex-col items-start">
+<div class="relative inline-block mb-4">
+<h1 class="font-headline font-black text-[12rem] md:text-[18rem] leading-none tracking-tighter text-on-surface glitch-text select-none">
+                        404
+                    </h1>
+<div class="absolute -top-4 -right-8 bg-secondary text-black font-headline font-black px-4 py-2 text-2xl border-4 border-black neo-shadow -rotate-6">
+                        CRASHED
+                    </div>
+</div>
+<div class="bg-surface-container-high border-4 border-black p-6 neo-shadow-pink max-w-md -mt-10 md:mt-0 ml-4 md:ml-20">
+<h2 class="font-headline font-black text-3xl md:text-5xl uppercase text-primary leading-none mb-4 italic">
+                        WHOOPS! THE VIBE IS GONE.
+                    </h2>
+<p class="text-xl font-bold text-on-surface-variant leading-tight">
+                        The frequency you are trying to reach has been scrambled or deleted. No signal detected at this coordinate.
+                    </p>
+</div>
+</div>
+<!-- Right Column: Visual Element & CTA -->
+<div class="md:col-span-5 flex flex-col items-center md:items-start gap-8">
+<div class="w-full aspect-square bg-surface-container border-4 border-black neo-shadow-lg overflow-hidden relative rotate-3">
+<img alt="Scrambled static" class="w-full h-full object-cover grayscale contrast-150 mix-blend-screen opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6uD3cqNAZY89i7yZbUMLRXGG_ISsOpKZ1RmZs2dlCu2fSWi-7luZTNK-ppybReR2eDWzLMLk5Rbg_KWE1rYrAIbUKyBflO3Gxv2LJ-81-EEPfIdxIIbjzCrmLUVMHj_y_ROtQLEhz5Z8DQWHb8U4hNOIjGanvfBcIRRKf3FtOFByIezfrLEDgVbr50Ro_bEHCNEVA_RS0y_nvEDCP30DP65d0kyUDTS8nrLT2uq95buwKfqUCVV7GW5stCUJgdY2Qyrxog7dzUjA"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-[10rem] text-primary" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+</div>
+<!-- Primary CTA -->
+<a class="group relative inline-block w-full" href="/">
+<div class="absolute inset-0 bg-black translate-x-2 translate-y-2 group-hover:translate-x-3 group-hover:translate-y-3 transition-transform"></div>
+<button class="relative w-full bg-primary text-black font-headline font-black text-3xl py-6 border-4 border-black transition-transform active:translate-x-1 active:translate-y-1">
+                        RETURN_TO_BASE
+                    </button>
+</a>
+<!-- Secondary Actions -->
+<div class="flex gap-4 w-full">
+<button class="flex-1 bg-secondary text-black font-label font-bold py-3 border-4 border-black neo-shadow hover:bg-white transition-colors">
+                        REPORT_LOG
+                    </button>
+<button class="flex-1 bg-surface-container-highest text-white font-label font-bold py-3 border-4 border-black neo-shadow hover:bg-tertiary hover:text-black transition-colors">
+                        HELP_CENTER
+                    </button>
+</div>
+</div>
+</div>
+<!-- Decorative Floating Elements -->
+<div class="absolute top-1/4 right-10 hidden lg:block">
+<div class="w-32 h-32 border-4 border-tertiary neo-shadow rotate-12 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-5xl">wifi_off</span>
+</div>
+</div>
+<div class="absolute bottom-1/4 left-10 hidden lg:block">
+<div class="bg-secondary p-4 border-4 border-black neo-shadow -rotate-12">
+<span class="font-headline font-black text-black">CODE: 0xDEADBEEF</span>
+</div>
+</div>
+</main>
+<!-- Scrolling Ticker Tape -->
+<footer class="fixed bottom-0 w-full z-50 overflow-hidden bg-primary border-t-4 border-black py-4">
+<div class="animate-ticker whitespace-nowrap">
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<!-- Duplicated for seamless loop -->
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+<span class="font-headline font-black text-4xl text-black px-4 italic">SIGNAL_LOST //</span>
+</div>
+</footer>
+</body>
+</html>

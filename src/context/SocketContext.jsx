@@ -7,31 +7,30 @@ export const useSocket = () => useContext(SocketContext)
 
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null)
-  const [user, setUser] = useState(null)
   const [onlineCount, setOnlineCount] = useState(0)
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
-    // In development, the proxy handles this, so we connect to the same origin
     const newSocket = io('/', {
-      withCredentials: true,
-      autoConnect: true
+      path: '/socket.io',
+      transports: ['websocket']
     })
 
-    setSocket(newSocket)
-
     newSocket.on('connect', () => {
-      console.log('Connected to socket server')
+      console.log('Connected to VibeServer')
     })
 
     newSocket.on('online_count', (count) => {
-      setOnlineCount(count || 0)
+      setOnlineCount(count)
     })
+
+    setSocket(newSocket)
 
     return () => newSocket.close()
   }, [])
 
   return (
-    <SocketContext.Provider value={{ socket, user, setUser, onlineCount }}>
+    <SocketContext.Provider value={{ socket, onlineCount, user, setUser }}>
       {children}
     </SocketContext.Provider>
   )
