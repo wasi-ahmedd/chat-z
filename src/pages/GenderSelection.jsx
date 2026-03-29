@@ -15,7 +15,7 @@ const GenderSelection = () => {
     if (!selected) return
     setLoading(true)
     try {
-      const response = await authService.signup()
+      const response = await authService.signup({})
       const newUser = response.data.user
       
       // Update with selected gender

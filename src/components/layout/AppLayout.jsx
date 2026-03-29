@@ -4,6 +4,7 @@ import { useSocket } from '../../context/SocketContext'
 import { User, Settings, MessageSquare, Compass, Radio } from 'lucide-react'
 import PremiumModal from '../common/PremiumModal'
 import ProfileModal from '../common/ProfileModal'
+import DesignToolbar from '../common/DesignToolbar'
 
 const AppLayout = ({ children, hideSidebar = false }) => {
   const { onlineCount } = useSocket()
@@ -101,6 +102,9 @@ const AppLayout = ({ children, hideSidebar = false }) => {
           <span>PROFILE</span>
         </button>
       </nav>
+
+      {/* VibeDesign Control Surface */}
+      <DesignToolbar />
     </div>
   )
 }

@@ -4,10 +4,20 @@ import { Server } from 'socket.io'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
+import fs from 'fs/promises'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const ROOT_DIR = path.join(__dirname, '..')
+const UI_CONFIG_PATH = path.join(ROOT_DIR, 'ui-config.json')
+const UI_STATE_PATH = path.join(ROOT_DIR, 'ui-state.json')
 
 const PORT = process.env.PORT || 3001
 const JWT_SECRET = process.env.JWT_SECRET || 'vibechat-secret-change-in-production'
-const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://127.0.0.1:5173'
+const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173'
+const CORS_ORIGIN_ALT = 'http://127.0.0.1:5173'
 const SESSION_COOKIE = 'vibechat_session'
 const SESSION_TTL_MS = 24 * 60 * 60 * 1000
 const VALID_GENDERS = ['male', 'female', 'other']
@@ -22,13 +32,13 @@ const httpServer = createServer(app)
 
 const io = new Server(httpServer, {
   cors: {
-    origin: CORS_ORIGIN,
+    origin: [CORS_ORIGIN, CORS_ORIGIN_ALT],
     methods: ['GET', 'POST', 'PATCH'],
     credentials: true
   }
 })
 
-app.use(cors({ origin: CORS_ORIGIN, credentials: true }))
+app.use(cors({ origin: [CORS_ORIGIN, CORS_ORIGIN_ALT], credentials: true }))
 app.use(express.json())
 
 const users = new Map()
@@ -48,6 +58,40 @@ const analytics = {
   activeNow: 0
 }
 
+// --- UI Persistence APIs ---
+app.get('/api/ui/config', async (req, res) => {
+  try {
+    const data = await fs.readFile(UI_CONFIG_PATH, 'utf8')
+    res.json(JSON.parse(data))
+  } catch (err) {
+    res.status(500).json({ error: 'FAILED_TO_LOAD_UI_CONFIG' })
+  }
+})
+
+app.get('/api/ui/state', async (req, res) => {
+  try {
+    const data = await fs.readFile(UI_STATE_PATH, 'utf8')
+    res.json(JSON.parse(data))
+  } catch (err) {
+    res.status(500).json({ error: 'FAILED_TO_LOAD_UI_STATE' })
+  }
+})
+
+app.post('/api/ui/save', async (req, res) => {
+  try {
+    const { config, state } = req.body
+    if (config) {
+      await fs.writeFile(UI_CONFIG_PATH, JSON.stringify(config, null, 2))
+    }
+    if (state) {
+      await fs.writeFile(UI_STATE_PATH, JSON.stringify(state, null, 2))
+    }
+    res.json({ ok: true })
+  } catch (err) {
+    res.status(500).json({ error: 'FAILED_TO_SAVE_UI' })
+  }
+})
+
 function generateAnonymousName() {
   const adjectives = [
     'Cosmic', 'Silent', 'Neon', 'Pixel', 'Lunar', 'Frost',
@@ -56,12 +100,11 @@ function generateAnonymousName() {
     'Serene', 'Vivid', 'Dreamy', 'Electric', 'Twilight', 'Stellar'
   ]
   const nouns = [
-    'Wanderer', 'Wave', 'Fox', 'Dancer', 'Shadow', 'Storm',
-    'Sky', 'Spark', 'Edge', 'Bloom', 'Drift', 'Wind',
-    'Rain', 'Spirit', 'Flame', 'Whisper', 'River', 'Phoenix',
-    'Comet', 'Star', 'Falcon', 'Aurora', 'Ember', 'Breeze'
+    'Rioter', 'Viber', 'Ghost', 'Stalker', 'Signal', 'Frequency',
+    'Nova', 'Pulse', 'Cipher', 'Shadow', 'Blade', 'Spark',
+    'Titan', 'Nomad', 'Seeker', 'Voyager', 'Guard', 'Wraith',
+    'Spirit', 'Agent', 'Pilot', 'Rover', 'Scout', 'Warden'
   ]
-
   const adj = adjectives[Math.floor(Math.random() * adjectives.length)]
   const noun = nouns[Math.floor(Math.random() * nouns.length)]
   return `${adj} ${noun}`
@@ -135,25 +178,19 @@ function sanitizeInterests(interests) {
 
   return [...new Set(interests
     .map((interest) => stripTags(interest).slice(0, MAX_INTEREST_LENGTH))
-    .filter(Boolean))]
-    .slice(0, MAX_INTERESTS)
+    .filter((interest) => interest.length > 0)
+    .slice(0, MAX_INTERESTS))]
 }
 
 function sanitizeGender(gender) {
-  const normalized = String(gender ?? '').toLowerCase().trim()
-  return VALID_GENDERS.includes(normalized) ? normalized : null
+  return VALID_GENDERS.includes(gender) ? gender : null
 }
 
-function sanitizeFilterGender(filterGender) {
-  const normalized = String(filterGender ?? '').toLowerCase().trim()
-  return VALID_FILTER_GENDERS.includes(normalized) ? normalized : 'both'
+function sanitizeFilterGender(gender) {
+  return VALID_FILTER_GENDERS.includes(gender) ? gender : 'both'
 }
 
 function sanitizeInterestTimeoutSeconds(rawValue) {
-  if (rawValue === 'forever' || rawValue === null) {
-    return null
-  }
-
   const numericValue = Number(rawValue)
   return VALID_INTEREST_TIMEOUTS.includes(numericValue) ? numericValue : 10
 }
@@ -256,6 +293,10 @@ function removeFromQueue(userId) {
   return false
 }
 
+function generateMatchId() {
+  return uuidv4()
+}
+
 function isParticipant(match, userId) {
   return match.user1.userId === userId || match.user2.userId === userId
 }
@@ -355,77 +396,51 @@ function getOrCreateFriendThread(userIdA, userIdB) {
   const threadKey = getFriendThreadKey(userIdA, userIdB)
   if (!friendThreads.has(threadKey)) {
     friendThreads.set(threadKey, {
-      id: uuidv4(),
-      participants: [userIdA, userIdB].sort(),
-      messages: [],
-      messageIds: new Set(),
-      unreadCounts: {
-        [userIdA]: 0,
-        [userIdB]: 0
-      }
+      userId1: [userIdA, userIdB].sort()[0],
+      userId2: [userIdA, userIdB].sort()[1],
+      messages: []
     })
   }
 
   return friendThreads.get(threadKey)
 }
 
-function getFriendThread(userIdA, userIdB) {
-  return friendThreads.get(getFriendThreadKey(userIdA, userIdB)) || null
+function addFriendMessage(userIdA, userIdB, senderUserId, text) {
+  const thread = getOrCreateFriendThread(userIdA, userIdB)
+  const message = {
+    id: uuidv4(),
+    sender: senderUserId,
+    text: stripTags(text).slice(0, MAX_MESSAGE_LENGTH),
+    timestamp: new Date().toISOString()
+  }
+
+  thread.messages.push(message)
+  if (thread.messages.length > 100) {
+    thread.messages.shift()
+  }
+
+  return message
 }
 
-function areFriends(userId, friendId) {
+function getRelationshipState(userId, targetUserId) {
   const user = getUser(userId)
-  return Boolean(user?.friends.some((friend) => friend.userId === friendId))
-}
-
-function getRelationshipState(viewerId, otherUserId) {
-  const viewer = getUser(viewerId)
-  if (!viewer || !otherUserId || viewerId === otherUserId) {
-    return {
-      isSelf: viewerId === otherUserId,
-      isFriend: false,
-      outgoingRequest: false,
-      incomingRequest: false
-    }
+  if (!user) {
+    return 'none'
   }
 
-  return {
-    isSelf: false,
-    isFriend: viewer.friends.some((friend) => friend.userId === otherUserId),
-    outgoingRequest: viewer.outgoingFollowRequests.some((request) => request.targetUserId === otherUserId),
-    incomingRequest: viewer.incomingFollowRequests.some((request) => request.fromUserId === otherUserId)
-  }
-}
-
-function serializeFriendMessage(message, currentUserId) {
-  return {
-    id: message.id,
-    text: message.text,
-    timestamp: message.timestamp,
-    fromSelf: message.sender === currentUserId
-  }
-}
-
-function serializeFriendSummary(currentUserId, friendId) {
-  const friend = getUser(friendId)
-  if (!friend) {
-    return null
+  if (user.friends.some((friend) => friend.userId === targetUserId)) {
+    return 'friend'
   }
 
-  const thread = getFriendThread(currentUserId, friendId)
-  const lastMessage = thread?.messages.at(-1) || null
-  const friendMeta = getUser(currentUserId)?.friends.find((entry) => entry.userId === friendId)
-
-  return {
-    id: friendId,
-    username: friend.username,
-    gender: friend.gender,
-    isPremium: Boolean(friend.isPremium),
-    since: friendMeta?.since || null,
-    unreadCount: thread?.unreadCounts[currentUserId] || 0,
-    lastMessagePreview: lastMessage ? lastMessage.text.slice(0, 80) : '',
-    lastMessageAt: lastMessage?.timestamp || null
+  if (user.outgoingFollowRequests.some((request) => request.targetUserId === targetUserId)) {
+    return 'pending_sent'
   }
+
+  if (user.incomingFollowRequests.some((request) => request.fromUserId === targetUserId)) {
+    return 'pending_received'
+  }
+
+  return 'none'
 }
 
 function serializeSocialState(userId) {
@@ -436,22 +451,32 @@ function serializeSocialState(userId) {
 
   const incomingRequests = user.incomingFollowRequests.map((request) => ({
     id: request.id,
-    createdAt: request.createdAt,
-    user: getPublicUserData(request.fromUserId)
+    fromUserId: request.fromUserId,
+    fromUsername: getUser(request.fromUserId)?.username || 'Stranger',
+    timestamp: request.timestamp
   }))
 
-  const acceptedNotifications = user.notifications
-    .filter((notification) => notification.type === 'follow_accepted')
-    .map((notification) => ({
-      id: notification.id,
-      createdAt: notification.createdAt,
-      read: notification.read,
-      user: getPublicUserData(notification.actorUserId),
-      message: notification.message
-    }))
+  const acceptedNotifications = user.notifications.filter((notification) => notification.type === 'follow_accepted')
 
   const friends = user.friends
-    .map((friend) => serializeFriendSummary(userId, friend.userId))
+    .map((friend) => {
+      const friendUser = getUser(friend.userId)
+      if (!friendUser) {
+        return null
+      }
+
+      const threadKey = getFriendThreadKey(userId, friend.userId)
+      const thread = friendThreads.get(threadKey)
+      const lastMessage = thread?.messages[thread.messages.length - 1]
+
+      return {
+        userId: friend.userId,
+        username: friendUser.username,
+        since: friend.since,
+        lastMessageAt: lastMessage?.timestamp || friend.since,
+        unreadCount: 0 // In-memory simplified
+      }
+    })
     .filter(Boolean)
     .sort((left, right) => {
       const leftTime = left?.lastMessageAt ? new Date(left.lastMessageAt).getTime() : 0
@@ -555,105 +580,58 @@ function broadcastQueuePositions() {
 }
 
 function entryAllowsFallback(entry) {
-  if (!entry.withInterests || entry.interests.length === 0) {
+  if (entry.withInterests === false) {
     return true
   }
 
-  if (entry.interestTimeoutMs === null) {
-    return false
-  }
-
-  return Date.now() - entry.joinedAt >= entry.interestTimeoutMs
-}
-
-function maybeNotifyInterestFallback(entry) {
-  if (entry.fallbackNotified || !entry.withInterests || entry.interests.length === 0) {
-    return
-  }
-
-  if (!entryAllowsFallback(entry)) {
-    return
-  }
-
-  entry.fallbackNotified = true
-  emitToUser(entry.userId, 'interest_fallback_started', { fallbackStarted: true })
-}
-
-function canEntriesMatch(leftEntry, rightEntry) {
-  if (leftEntry.userId === rightEntry.userId) {
-    return null
-  }
-
-  if (leftEntry.isPremium && leftEntry.filterGender !== 'both' && rightEntry.gender !== leftEntry.filterGender) {
-    return null
-  }
-
-  if (rightEntry.isPremium && rightEntry.filterGender !== 'both' && leftEntry.gender !== rightEntry.filterGender) {
-    return null
-  }
-
-  const sharedInterests = leftEntry.interests.filter((interest) => rightEntry.interests.includes(interest))
-  const leftNeedsShared = leftEntry.withInterests && leftEntry.interests.length > 0 && !entryAllowsFallback(leftEntry)
-  const rightNeedsShared = rightEntry.withInterests && rightEntry.interests.length > 0 && !entryAllowsFallback(rightEntry)
-
-  if ((leftNeedsShared || rightNeedsShared) && sharedInterests.length === 0) {
-    console.log(`[matchmaking] skip same-interests: user1=${leftEntry.userId} user2=${rightEntry.userId}`)
-    return null
-  }
-
-  return { sharedInterests }
+  const waitTimeMs = Date.now() - entry.joinedAt
+  const timeoutMs = getUser(entry.userId)?.matchPreferences?.interestTimeout * 1000 || 10000
+  return waitTimeMs >= timeoutMs
 }
 
 function processQueue() {
-  for (const entry of matchQueue) {
-    maybeNotifyInterestFallback(entry)
+  if (matchQueue.length < 2) {
+    broadcastQueuePositions()
+    return
   }
 
-  let foundMatch = true
-  while (foundMatch) {
-    foundMatch = false
+  for (let i = 0; i < matchQueue.length; i++) {
+    const entryA = matchQueue[i]
+    for (let j = i + 1; j < matchQueue.length; j++) {
+      const entryB = matchQueue[j]
 
-    for (let leftIndex = 0; leftIndex < matchQueue.length; leftIndex += 1) {
-      const leftEntry = matchQueue[leftIndex]
-      if (!io.sockets.sockets.get(leftEntry.socketId)) {
-        matchQueue.splice(leftIndex, 1)
-        leftIndex -= 1
-        continue
+      // Simplified matching logic for MVP
+      let matchDecision = null
+
+      // Check interests
+      const sharedInterests = entryA.interests.filter((interest) => entryB.interests.includes(interest))
+
+      if (sharedInterests.length > 0) {
+        matchDecision = { sharedInterests }
+      } else if (entryAllowsFallback(entryA) && entryAllowsFallback(entryB)) {
+        matchDecision = { sharedInterests: [] }
       }
 
-      for (let rightIndex = leftIndex + 1; rightIndex < matchQueue.length; rightIndex += 1) {
-        const rightEntry = matchQueue[rightIndex]
-        if (!io.sockets.sockets.get(rightEntry.socketId)) {
-          matchQueue.splice(rightIndex, 1)
-          rightIndex -= 1
-          continue
-        }
+      if (matchDecision) {
+        // Remove from queue
+        matchQueue.splice(j, 1)
+        matchQueue.splice(i, 1)
 
-        const matchDecision = canEntriesMatch(leftEntry, rightEntry)
-        if (!matchDecision) {
-          continue
-        }
-
-        console.log(`[matchmaking] PAIR_FOUND: ${leftEntry.userId} + ${rightEntry.userId}`)
-        matchQueue.splice(rightIndex, 1)
-        matchQueue.splice(leftIndex, 1)
-
-        const matchId = uuidv4()
+        const matchId = generateMatchId()
         const match = {
-          user1: leftEntry,
-          user2: rightEntry,
+          user1: entryA,
+          user2: entryB,
           sharedInterests: matchDecision.sharedInterests,
-          startedAt: Date.now(),
           messages: [],
-          messageIds: new Set()
+          startedAt: Date.now()
         }
 
         activeMatches.set(matchId, match)
-        analytics.totalChats += 1
-        analytics.chatsByHour[new Date().getHours()] += 1
-        updateDailyStats('chats')
 
-        // Set match state for ALL sockets of these users
+        // Set sockets to matched state
+        const leftEntry = entryA
+        const rightEntry = entryB
+
         const leftSockets = io.sockets.adapter.rooms.get(leftEntry.userId)
         const rightSockets = io.sockets.adapter.rooms.get(rightEntry.userId)
 
@@ -711,9 +689,10 @@ app.get('/api/health', (req, res) => {
 app.post('/api/auth/signup', (req, res) => {
   const userId = uuidv4()
   const user = createUser(userId)
+  const body = req.body || {}
   
-  if (req.body.username) user.username = stripTags(req.body.username).slice(0, 32)
-  if (req.body.gender) user.gender = sanitizeGender(req.body.gender)
+  if (body.username) user.username = stripTags(body.username).slice(0, 32)
+  if (body.gender) user.gender = sanitizeGender(body.gender)
 
   users.set(userId, user)
   issueSessionCookie(res, userId)
@@ -822,12 +801,7 @@ app.get('/api/social/state', (req, res) => {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
-  const socialState = serializeSocialState(userId)
-  if (!socialState) {
-    return res.status(404).json({ error: 'User not found' })
-  }
-
-  return res.json(socialState)
+  return res.json(serializeSocialState(userId))
 })
 
 app.post('/api/social/notifications/read', (req, res) => {
@@ -836,116 +810,10 @@ app.post('/api/social/notifications/read', (req, res) => {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
-  if (req.body.type === 'accepted') {
+  if (req.body.type === 'follow_accepted') {
     markAcceptedNotificationsRead(userId)
   }
 
-  emitSocialState(userId)
-  return res.json({ ok: true })
-})
-
-app.post('/api/friends/requests', (req, res) => {
-  const userId = getAuthenticatedUserId(req)
-  if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized' })
-  }
-
-  const targetUserId = stripTags(req.body.targetUserId)
-  if (!targetUserId || targetUserId === userId) {
-    return res.status(400).json({ error: 'Choose a valid user to follow.' })
-  }
-
-  const user = getUser(userId)
-  const targetUser = getUser(targetUserId)
-  if (!user || !targetUser) {
-    return res.status(404).json({ error: 'User not found' })
-  }
-
-  if (areFriends(userId, targetUserId)) {
-    return res.status(409).json({ error: 'You are already friends.' })
-  }
-
-  if (user.outgoingFollowRequests.some((request) => request.targetUserId === targetUserId)) {
-    return res.status(409).json({ error: 'Follow request already sent.' })
-  }
-
-  if (user.incomingFollowRequests.some((request) => request.fromUserId === targetUserId)) {
-    return res.status(409).json({ error: 'That user already sent you a request.' })
-  }
-
-  const requestId = uuidv4()
-  const createdAt = new Date().toISOString()
-  user.outgoingFollowRequests.unshift({ id: requestId, targetUserId, createdAt })
-  targetUser.incomingFollowRequests.unshift({ id: requestId, fromUserId: userId, createdAt })
-
-  emitSocialState(userId)
-  emitSocialState(targetUserId)
-
-  return res.status(201).json({
-    ok: true,
-    requestId,
-    relationship: getRelationshipState(userId, targetUserId)
-  })
-})
-
-app.post('/api/friends/requests/:requestId/accept', (req, res) => {
-  const userId = getAuthenticatedUserId(req)
-  if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized' })
-  }
-
-  const user = getUser(userId)
-  if (!user) {
-    return res.status(404).json({ error: 'User not found' })
-  }
-
-  const incomingRequest = user.incomingFollowRequests.find((request) => request.id === req.params.requestId)
-  if (!incomingRequest) {
-    return res.status(404).json({ error: 'Request not found' })
-  }
-
-  const fromUserId = incomingRequest.fromUserId
-  removeFollowRequestPair(fromUserId, userId)
-  addFriendship(fromUserId, userId)
-  getOrCreateFriendThread(fromUserId, userId)
-
-  addNotification(fromUserId, {
-    id: uuidv4(),
-    type: 'follow_accepted',
-    actorUserId: userId,
-    createdAt: new Date().toISOString(),
-    read: false,
-    message: `${getPublicUserData(userId).username} accepted your follow request.`
-  })
-
-  emitSocialState(fromUserId)
-  emitSocialState(userId)
-
-  return res.json({
-    ok: true,
-    friend: getPublicUserData(fromUserId)
-  })
-})
-
-app.post('/api/friends/requests/:requestId/decline', (req, res) => {
-  const userId = getAuthenticatedUserId(req)
-  if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized' })
-  }
-
-  const user = getUser(userId)
-  if (!user) {
-    return res.status(404).json({ error: 'User not found' })
-  }
-
-  const incomingRequest = user.incomingFollowRequests.find((request) => request.id === req.params.requestId)
-  if (!incomingRequest) {
-    return res.status(404).json({ error: 'Request not found' })
-  }
-
-  removeFollowRequestPair(incomingRequest.fromUserId, userId)
-  emitSocialState(incomingRequest.fromUserId)
-  emitSocialState(userId)
   return res.json({ ok: true })
 })
 
@@ -956,7 +824,7 @@ app.get('/api/friends', (req, res) => {
   }
 
   const socialState = serializeSocialState(userId)
-  return res.json({ friends: socialState?.friends || [] })
+  return res.json({ friends: socialState.friends })
 })
 
 app.get('/api/friends/:friendId/messages', (req, res) => {
@@ -965,35 +833,116 @@ app.get('/api/friends/:friendId/messages', (req, res) => {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
-  const friendId = stripTags(req.params.friendId)
-  if (!areFriends(userId, friendId)) {
-    return res.status(403).json({ error: 'Only friends can chat directly.' })
+  const user = getUser(userId)
+  if (!user.friends.some((f) => f.userId === req.params.friendId)) {
+    return res.status(403).json({ error: 'Not friends' })
   }
 
-  const thread = getOrCreateFriendThread(userId, friendId)
-  thread.unreadCounts[userId] = 0
-  emitSocialState(userId)
-
-  return res.json({
-    friend: serializeFriendSummary(userId, friendId),
-    messages: thread.messages.map((message) => serializeFriendMessage(message, userId))
-  })
+  const thread = getOrCreateFriendThread(userId, req.params.friendId)
+  return res.json({ messages: thread.messages })
 })
 
-app.post('/api/friends/:friendId/read', (req, res) => {
+app.post('/api/friends/requests', (req, res) => {
   const userId = getAuthenticatedUserId(req)
   if (!userId) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
-  const friendId = stripTags(req.params.friendId)
-  if (!areFriends(userId, friendId)) {
-    return res.status(403).json({ error: 'Only friends can chat directly.' })
+  const targetUserId = req.body.targetUserId
+  if (!targetUserId || targetUserId === userId) {
+    return res.status(400).json({ error: 'Invalid target' })
   }
 
-  const thread = getOrCreateFriendThread(userId, friendId)
-  thread.unreadCounts[userId] = 0
+  const user = getUser(userId)
+  const targetUser = getUser(targetUserId)
+
+  if (!targetUser) {
+    return res.status(404).json({ error: 'Target user not found' })
+  }
+
+  if (user.friends.some((f) => f.userId === targetUserId)) {
+    return res.status(400).json({ error: 'Already friends' })
+  }
+
+  if (user.outgoingFollowRequests.some((r) => r.targetUserId === targetUserId)) {
+    return res.status(400).json({ error: 'Request already sent' })
+  }
+
+  // Check if they already sent a request to us - then accept it
+  const incoming = user.incomingFollowRequests.find((r) => r.fromUserId === targetUserId)
+  if (incoming) {
+    removeFollowRequestPair(targetUserId, userId)
+    addFriendship(userId, targetUserId)
+    addNotification(targetUserId, {
+      id: uuidv4(),
+      type: 'follow_accepted',
+      fromUserId: userId,
+      timestamp: new Date().toISOString(),
+      read: false
+    })
+    emitSocialState(userId)
+    emitSocialState(targetUserId)
+    return res.json({ ok: true, status: 'friend' })
+  }
+
+  const requestId = uuidv4()
+  const timestamp = new Date().toISOString()
+
+  user.outgoingFollowRequests.push({ id: requestId, targetUserId, timestamp })
+  targetUser.incomingFollowRequests.push({ id: requestId, fromUserId: userId, timestamp })
+
+  emitSocialState(targetUserId)
+  return res.json({ ok: true, status: 'pending' })
+})
+
+app.post('/api/friends/requests/:requestId/accept', (req, res) => {
+  const userId = getAuthenticatedUserId(req)
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' })
+  }
+
+  const user = getUser(userId)
+  const request = user.incomingFollowRequests.find((r) => r.id === req.params.requestId)
+
+  if (!request) {
+    return res.status(404).json({ error: 'Request not found' })
+  }
+
+  const fromUserId = request.fromUserId
+  removeFollowRequestPair(fromUserId, userId)
+  addFriendship(userId, fromUserId)
+  
+  addNotification(fromUserId, {
+    id: uuidv4(),
+    type: 'follow_accepted',
+    fromUserId: userId,
+    timestamp: new Date().toISOString(),
+    read: false
+  })
+
   emitSocialState(userId)
+  emitSocialState(fromUserId)
+
+  return res.json({ ok: true })
+})
+
+app.post('/api/friends/requests/:requestId/decline', (req, res) => {
+  const userId = getAuthenticatedUserId(req)
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' })
+  }
+
+  const user = getUser(userId)
+  const request = user.incomingFollowRequests.find((r) => r.id === req.params.requestId)
+
+  if (!request) {
+    return res.status(404).json({ error: 'Request not found' })
+  }
+
+  removeFollowRequestPair(request.fromUserId, userId)
+  emitSocialState(userId)
+  emitSocialState(request.fromUserId)
+
   return res.json({ ok: true })
 })
 
@@ -1003,356 +952,123 @@ app.get('/api/match/active', (req, res) => {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
-  for (const [matchId, match] of activeMatches.entries()) {
-    const serializedMatch = serializeMatchForUser(matchId, match, userId)
-    if (serializedMatch) {
-      return res.json(serializedMatch)
+  const socketIds = socketIdsByUserId.get(userId)
+  if (!socketIds) {
+    return res.json(null)
+  }
+
+  let activeMatch = null
+  for (const socketId of socketIds) {
+    const socket = io.sockets.sockets.get(socketId)
+    if (socket?.data?.currentMatchId) {
+      const match = activeMatches.get(socket.data.currentMatchId)
+      if (match) {
+        activeMatch = serializeMatchForUser(socket.data.currentMatchId, match, userId)
+        break
+      }
     }
   }
 
-  return res.json({ match: null })
-})
-
-app.get('/api/analytics/overview', (req, res) => {
-  const apiKey = req.headers['x-api-key']
-  if (apiKey !== (process.env.ANALYTICS_API_KEY || 'vibe-admin-key')) {
-    return res.status(403).json({ error: 'Invalid API key' })
-  }
-
-  return res.json({
-    totalUsers: analytics.totalUsers,
-    totalChats: analytics.totalChats,
-    totalMessages: analytics.totalMessages,
-    premiumUsers: analytics.premiumUsers,
-    revenue: analytics.revenue,
-    activeNow: io.engine.clientsCount || 0,
-    queueSize: matchQueue.length,
-    activeMatches: activeMatches.size,
-    dailyStats: analytics.dailyStats,
-    chatsByHour: analytics.chatsByHour,
-    timestamp: new Date().toISOString()
-  })
-})
-
-app.get('/api/analytics/earnings', (req, res) => {
-  const apiKey = req.headers['x-api-key']
-  if (apiKey !== (process.env.ANALYTICS_API_KEY || 'vibe-admin-key')) {
-    return res.status(403).json({ error: 'Invalid API key' })
-  }
-
-  const dailyEarnings = {}
-  for (const [day, stats] of Object.entries(analytics.dailyStats)) {
-    dailyEarnings[day] = {
-      ...stats,
-      revenue: stats.revenue || 0
-    }
-  }
-
-  return res.json({
-    totalRevenue: analytics.revenue,
-    premiumSubscribers: analytics.premiumUsers,
-    dailyBreakdown: dailyEarnings,
-    currency: 'INR',
-    timestamp: new Date().toISOString()
-  })
-})
-
-app.get('/api/analytics/users', (req, res) => {
-  const apiKey = req.headers['x-api-key']
-  if (apiKey !== (process.env.ANALYTICS_API_KEY || 'vibe-admin-key')) {
-    return res.status(403).json({ error: 'Invalid API key' })
-  }
-
-  return res.json({
-    totalRegistered: analytics.totalUsers,
-    currentlyOnline: io.engine.clientsCount || 0,
-    inQueue: matchQueue.length,
-    inActiveChats: activeMatches.size * 2,
-    premiumCount: analytics.premiumUsers,
-    recentSignups: Array.from(users.values())
-      .sort((left, right) => new Date(right.createdAt) - new Date(left.createdAt))
-      .slice(0, 20)
-      .map((user) => ({
-        id: user.id,
-        username: user.username,
-        gender: user.gender,
-        isPremium: user.isPremium,
-        createdAt: user.createdAt
-      })),
-    timestamp: new Date().toISOString()
-  })
-})
-
-io.use((socket, next) => {
-  const cookies = parseCookies(socket.handshake.headers.cookie)
-  const decoded = verifyToken(cookies[SESSION_COOKIE])
-
-  if (!decoded) {
-    console.log(`[io-auth] Rejected connection for socket=${socket.id}: NO_VAULT_SESSION`)
-    return next(new Error('Unauthorized'))
-  }
-
-  const user = getUser(decoded.userId)
-  if (!user) {
-    return next(new Error('Unauthorized'))
-  }
-
-  socket.data.userId = decoded.userId
-  socket.data.currentMatchId = null
-  socket.data.currentFriendId = null
-  return next()
+  return res.json(activeMatch)
 })
 
 io.on('connection', (socket) => {
-  const currentUserId = socket.data.userId
-  registerSocket(currentUserId, socket.id)
+  const cookies = parseCookies(socket.handshake.headers.cookie)
+  const token = cookies[SESSION_COOKIE]
+  const decoded = verifyToken(token)
 
-  analytics.activeNow = io.engine.clientsCount || 0
-  emitSocialState(currentUserId)
-  console.log(`[socket] connected ${socket.id} user=${currentUserId}`)
-
-  // Catch-up Mechanism: Check if this user is ALREADY in an active match
-  // If so, emit the match data immediately to the new socket
-  for (const [matchId, match] of activeMatches.entries()) {
-    if (match.user1.userId === currentUserId || match.user2.userId === currentUserId) {
-      const partnerUser = match.user1.userId === currentUserId ? match.user2 : match.user1
-      socket.emit('match_found', {
-        matchId,
-        partner: getPublicUserData(partnerUser.userId, partnerUser.gender),
-        sharedInterests: match.sharedInterests,
-        reconnected: true
-      })
-      console.log(`[sync] Catch-up data sent to user=${currentUserId} for match=${matchId}`)
-      break
-    }
+  if (!decoded) {
+    socket.disconnect()
+    return
   }
 
-  socket.on('join_queue', (payload = {}) => {
-    const user = getUser(currentUserId)
-    if (!user) {
-      socket.emit('queue_error', { message: 'Unable to load your session.' })
-      return
-    }
+  const currentUserId = decoded.userId
+  const user = getUser(currentUserId)
 
-    if (socket.data.currentMatchId) {
-      socket.emit('queue_error', { message: 'Finish your active chat before joining again.' })
-      return
-    }
+  if (!user) {
+    socket.disconnect()
+    return
+  }
 
-    const resolvedGender = payload.gender ? sanitizeGender(payload.gender) : user.gender
-    if (!resolvedGender) {
-      socket.emit('queue_error', { message: 'Choose a valid gender before searching.' })
-      return
-    }
+  socket.data.userId = currentUserId
+  registerSocket(currentUserId, socket.id)
+  socket.join(currentUserId)
 
-    const interests = sanitizeInterests(payload.interests)
-    const requestedFilter = sanitizeFilterGender(payload.filterGender)
-    const effectiveFilter = user.isPremium ? requestedFilter : 'both'
-    const withInterests = payload.withInterests !== undefined ? Boolean(payload.withInterests) : user.matchPreferences.withInterests
-    const interestTimeoutSeconds = sanitizeInterestTimeoutSeconds(
-      payload.interestTimeoutSeconds !== undefined
-        ? payload.interestTimeoutSeconds
-        : user.matchPreferences.interestTimeout
-    )
+  console.log(`[socket] connected ${socket.id} user=${currentUserId}`)
 
-    user.gender = resolvedGender
-    user.matchPreferences = {
-      ...user.matchPreferences,
-      genderFilter: effectiveFilter,
-      withInterests,
-      interestTimeout: interestTimeoutSeconds
-    }
+  emitSocialState(currentUserId)
+  socket.emit('online_count', { count: io.engine.clientsCount || 0 })
 
+  socket.on('join_queue', (data) => {
     removeFromQueue(currentUserId)
-
     matchQueue.push({
       userId: currentUserId,
       socketId: socket.id,
-      interests,
-      gender: resolvedGender,
-      filterGender: effectiveFilter,
-      isPremium: user.isPremium,
-      withInterests,
-      interestTimeoutMs: 2000,
-      joinedAt: Date.now(),
-      fallbackNotified: interests.length === 0 || !withInterests
+      interests: sanitizeInterests(data.interests),
+      withInterests: Boolean(data.withInterests),
+      joinedAt: Date.now()
     })
     processQueue()
-    console.log(`[queue] user=${currentUserId} interests=[${interests.join(',')}] size=${matchQueue.length}`)
   })
 
   socket.on('leave_queue', () => {
-    if (removeFromQueue(currentUserId)) {
-      socket.emit('queue_left')
-      broadcastQueuePositions()
-    }
+    removeFromQueue(currentUserId)
   })
 
-  socket.on('send_message', (payload = {}) => {
-    const matchId = String(payload.matchId || '')
-    const text = stripTags(payload.text).slice(0, MAX_MESSAGE_LENGTH)
-    const incomingMessageId = stripTags(payload.messageId)
-
-    if (!matchId || !text) {
-      return
-    }
-
+  socket.on('send_message', (data) => {
+    const matchId = data.matchId
     const match = activeMatches.get(matchId)
     if (!match || !isParticipant(match, currentUserId)) {
-      socket.emit('chat_error', { message: 'That chat is no longer active.' })
-      return
-    }
-
-    if (incomingMessageId && match.messageIds.has(incomingMessageId)) {
-      const existingMessage = match.messages.find((message) => message.id === incomingMessageId)
-      if (existingMessage) {
-        socket.emit('new_message', {
-          matchId,
-          id: existingMessage.id,
-          text: existingMessage.text,
-          timestamp: existingMessage.timestamp,
-          fromSelf: true
-        })
-      }
       return
     }
 
     const message = {
-      id: incomingMessageId || uuidv4(),
+      id: uuidv4(),
       sender: currentUserId,
-      text,
-      timestamp: Date.now()
+      text: stripTags(data.text).slice(0, MAX_MESSAGE_LENGTH),
+      timestamp: new Date().toISOString()
     }
 
     match.messages.push(message)
-    match.messageIds.add(message.id)
+    io.to(match.user1.userId).to(match.user2.userId).emit('new_message', message)
     analytics.totalMessages += 1
     updateDailyStats('messages')
-
-    socket.emit('new_message', {
-      matchId,
-      id: message.id,
-      text: message.text,
-      timestamp: message.timestamp,
-      fromSelf: true
-    })
-
-    getPartnerSocket(match, currentUserId)?.emit('new_message', {
-      matchId,
-      id: message.id,
-      text: message.text,
-      timestamp: message.timestamp,
-      fromSelf: false
-    })
   })
 
-  socket.on('send_friend_message', (payload = {}) => {
-    const friendId = stripTags(payload.friendId)
-    const text = stripTags(payload.text).slice(0, MAX_MESSAGE_LENGTH)
-    const incomingMessageId = stripTags(payload.messageId)
+  socket.on('typing_start', (data) => {
+    const match = activeMatches.get(data.matchId)
+    if (match && isParticipant(match, currentUserId)) {
+      const partnerSocket = getPartnerSocket(match, currentUserId)
+      partnerSocket?.emit('partner_typing', { isTyping: true })
+    }
+  })
 
-    if (!friendId || !text || !areFriends(currentUserId, friendId)) {
-      socket.emit('chat_error', { message: 'Only friends can chat directly.' })
+  socket.on('typing_stop', (data) => {
+    const match = activeMatches.get(data.matchId)
+    if (match && isParticipant(match, currentUserId)) {
+      const partnerSocket = getPartnerSocket(match, currentUserId)
+      partnerSocket?.emit('partner_typing', { isTyping: false })
+    }
+  })
+
+  socket.on('disconnect_match', (data) => {
+    endMatch(data.matchId, currentUserId)
+  })
+
+  socket.on('send_friend_message', (data) => {
+    const { friendId, text } = data
+    if (!user.friends.some((f) => f.userId === friendId)) {
       return
     }
 
-    const thread = getOrCreateFriendThread(currentUserId, friendId)
-    if (incomingMessageId && thread.messageIds.has(incomingMessageId)) {
-      const existingMessage = thread.messages.find((message) => message.id === incomingMessageId)
-      if (existingMessage) {
-        socket.emit('friend_message', {
-          friendId,
-          id: existingMessage.id,
-          text: existingMessage.text,
-          timestamp: existingMessage.timestamp,
-          fromSelf: true
-        })
-      }
-      return
-    }
-
-    const message = {
-      id: incomingMessageId || uuidv4(),
-      sender: currentUserId,
-      text,
-      timestamp: Date.now()
-    }
-
-    thread.messages.push(message)
-    thread.messageIds.add(message.id)
-    thread.unreadCounts[currentUserId] = 0
-    thread.unreadCounts[friendId] = (thread.unreadCounts[friendId] || 0) + 1
-    analytics.totalMessages += 1
-    updateDailyStats('messages')
-
-    emitToUser(currentUserId, 'friend_message', {
-      friendId,
-      id: message.id,
-      text: message.text,
-      timestamp: message.timestamp,
-      fromSelf: true
-    })
-
-    emitToUser(friendId, 'friend_message', {
-      friendId: currentUserId,
-      id: message.id,
-      text: message.text,
-      timestamp: message.timestamp,
-      fromSelf: false
-    })
-
-    emitSocialState(currentUserId)
-    emitSocialState(friendId)
-  })
-
-  socket.on('mark_friend_thread_read', ({ friendId } = {}) => {
-    const normalizedFriendId = stripTags(friendId)
-    if (!normalizedFriendId || !areFriends(currentUserId, normalizedFriendId)) {
-      return
-    }
-
-    const thread = getOrCreateFriendThread(currentUserId, normalizedFriendId)
-    thread.unreadCounts[currentUserId] = 0
-    emitSocialState(currentUserId)
-  })
-
-  socket.on('typing_start', ({ matchId } = {}) => {
-    const match = activeMatches.get(matchId)
-    if (!match || !isParticipant(match, currentUserId)) {
-      return
-    }
-
-    getPartnerSocket(match, currentUserId)?.emit('partner_typing', { isTyping: true })
-  })
-
-  socket.on('typing_stop', ({ matchId } = {}) => {
-    const match = activeMatches.get(matchId)
-    if (!match || !isParticipant(match, currentUserId)) {
-      return
-    }
-
-    getPartnerSocket(match, currentUserId)?.emit('partner_typing', { isTyping: false })
-  })
-
-  socket.on('disconnect_match', ({ matchId } = {}) => {
-    const activeMatchId = matchId || socket.data.currentMatchId
-    if (!activeMatchId) {
-      return
-    }
-
-    endMatch(activeMatchId, currentUserId)
-  })
-
-  socket.on('report_user', ({ matchId, reason } = {}) => {
-    console.log(`[report] user=${currentUserId} match=${matchId} reason=${stripTags(reason).slice(0, 200)}`)
-    socket.emit('report_received', { ok: true })
+    const message = addFriendMessage(currentUserId, friendId, currentUserId, text)
+    emitToUser(currentUserId, 'new_friend_message', { friendId, message })
+    emitToUser(friendId, 'new_friend_message', { friendId: currentUserId, message })
   })
 
   socket.on('disconnect', () => {
-    analytics.activeNow = io.engine.clientsCount || 0
     unregisterSocket(currentUserId, socket.id)
     removeFromQueue(currentUserId)
-    broadcastQueuePositions()
 
     if (socket.data.currentMatchId) {
       endMatch(socket.data.currentMatchId, currentUserId)
